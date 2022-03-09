@@ -9,16 +9,6 @@
     name: cassandra
     group: cassandra
 
-- debug:
-    msg: "{{ cassandra.version}}"
-
-# - set_fact:
-#     cassandra_package_name: "cassandra_{{ cassandra.scala_version }}-{{ cassandra.version }}.tgz"
-
-- debug:
-    msg: "{{ cassandra.version}}"
-
-
 - name: check cassandra package
   stat: path={{ package_download_path }}/{{ cassandra_package_name }}
   register: cassandra_package_exists

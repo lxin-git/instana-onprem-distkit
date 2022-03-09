@@ -28,7 +28,7 @@
 #    - debug:
 #        msg: "{{ groups['zookeeper_node'] | list }}.cinst-k2.fyre.ibm.com|int)"
 
-- hosts: cassandra_node
+- hosts: zookeeper_node
   gather_facts: True
   roles:
-     - { role: testes }
+     - { role: test1 }

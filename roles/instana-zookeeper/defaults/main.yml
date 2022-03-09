@@ -7,7 +7,6 @@ zookeeper:
   version: 3.6.3
   install_dir: /opt/zookeeper
   download_mirror: https://archive.apache.org/dist/zookeeper
-
   configuration:
     heap_size: 2048
     jvmflags: '-XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled'
@@ -28,21 +27,3 @@ zookeeper:
     members: "{{ groups['zookeeper_node'] | map('extract', hostvars, 'ansible_default_ipv4') | map(attribute='address') | list }}"
     member_id: "{{ ansible_default_ipv4.address }}"
 #-------------------------------------------------
-
-    # The following configuration considered to be deprecated.
-    global_outstanding_limit: 1000
-    prealloc_size: 64M
-    snap_count: 100000
-    fsync_warning_threshold_ms: 1000
-    server_username: foo
-    server_password: foz
-    clients:
-      - username: bar
-        password: baz
-    jmx_host: 127.0.0.1
-    jmx_port: 9181
-    jmx_rmi_port: 9182
-    jmx_username: foz
-    jmx_password: baz
-    jmx_role: readonly
-    4lw_commands_whitelist: srvr,stat,mntr

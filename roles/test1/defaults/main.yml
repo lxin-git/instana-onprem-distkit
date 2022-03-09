@@ -1,53 +1,48 @@
 ---
-
-cockroachdb:
+#-------------------------------------------------
+# Default properties may be replaced by group_vars
+#-------------------------------------------------
+zookeeper:
   java_home: "{{ instana_java_home }}"
-  version: 21.1.7
-  install_dir: /opt/cockroachdb
-  download_mirror: https://binaries.cockroachdb.com
-  # https://binaries.cockroachdb.com/cockroach-v21.1.7.linux-amd64.tgz
+  version: 3.6.3
+  install_dir: /opt/zookeeper
+  download_mirror: https://archive.apache.org/dist/zookeeper
 
   configuration:
-    port: 26257
-    http_port: 8001
-    data_dir: /mnt/data/cockroachdb
-    log_dir: /var/log/cockroachdb
+    heap_size: 2048
+    jvmflags: '-XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled'
+    client_port: 2181
+    data_dir: /mnt/data/zookeeper
+    conf_dir: /etc/zookeeper
+    log_dir: /var/log/zookeeper
+    log_file: zookeeper.log
+    log_level: INFO
+    log_max_file_size: 265MB
+    log_max_backup_index: 20
+    max_client_cnxns: 0
+    tick_time: 2000
+    init_limit: 10
+    sync_limit: 5
+    autopurge_snapretain_count: 20
+    purge_interval: 1
+    members: "{{ groups['zookeeper_node'] | map('extract', hostvars, 'ansible_default_ipv4') | map(attribute='address') | list }}"
+    member_id: "{{ ansible_default_ipv4.address }}"
+#-------------------------------------------------
 
-
-clickhouse:
-  # For server.xml.j2
-  version: 21.3.8.76
-  data_dir: /mnt/traces/clickhouse
-  log_dir: "/var/log/clickhouse-server"
-  logger_level: information
-  logger_size: 200M
-  logger_count: 10
-  http_port: 8123
-  tcp_port: 9000
-  dynamic_file: /etc/clickhouse-server/dynamic.xml
-  interserver_http_port: 9009
-  listen_host:
-    - "0.0.0.0"
-  configuration:
-    max_connections: 16384
-    keep_alive_timeout: 3
-    max_concurrent_queries: 100
-    uncompressed_cache_size: 8589934592
-    mark_cache_size: 5368709120
-    builtin_dictionaries_reload_interval: 3600
-    max_session_timeout: 3600
-    default_session_timeout: 60
-
-  # For dynamic.xml.j2
-  cluster_name: local
-  shards:
-    0:
-      - { host: "cinst-k1.fyre.ibm.com", port: 9000 }
-      - { host: "cinst-k2.fyre.ibm.com", port: 9000 }
-    1:
-      - { host: "cinst-k3.fyre.ibm.com", port: 9000 }
-      - { host: "cinst-k4.fyre.ibm.com", port: 9000 }
-  zknodes:
-    - { host: "9.112.255.160", port: 2181 }
-    - { host: "9.112.255.163", port: 2181 }
-    - { host: "9.123.116.50", port: 2181 }
+    # The following configuration considered to be deprecated.
+    global_outstanding_limit: 1000
+    prealloc_size: 64M
+    snap_count: 100000
+    fsync_warning_threshold_ms: 1000
+    server_username: foo
+    server_password: foz
+    clients:
+      - username: bar
+        password: baz
+    jmx_host: 127.0.0.1
+    jmx_port: 9181
+    jmx_rmi_port: 9182
+    jmx_username: foz
+    jmx_password: baz
+    jmx_role: readonly
+    4lw_commands_whitelist: srvr,stat,mntr

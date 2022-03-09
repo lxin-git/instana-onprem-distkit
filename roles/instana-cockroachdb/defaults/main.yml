@@ -7,7 +7,6 @@ cockroachdb:
   install_dir: /opt/cockroachdb
   download_mirror: https://binaries.cockroachdb.com
   # https://binaries.cockroachdb.com/cockroach-v21.1.7.linux-amd64.tgz
-
   configuration:
     port: 26257
     http_port: 8001  # make sure not occupied as k8s nginx ingress will use 8081

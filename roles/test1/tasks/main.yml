@@ -13,18 +13,32 @@
 #  debug:
 #    msg: "{{ inventory_hostname }}"
 #
-#- name: check var inside play
-#  debug:
-#    msg: "{{ inventory_hostname_short }}"
+
+- name:  instana_java_home
+  debug:
+    msg: "{{ instana_java_home }}"
+
+- name:  zookeeper
+  debug:
+    msg: "{{ zookeeper }}"
+
+- name:  zookeeper.configuration.global_outstanding_limit
+  debug:
+    msg: "{{ zookeeper.configuration.global_outstanding_limit }}"
 
 
-- name: TEST Config | Generate test join config
-  template:
-    src: test.j2
-    dest: "/tmp/jointest.yaml"
-    mode: "ug=rw,o-rwx"
-  become: true
+- name:  zookeeper.java_home
+  debug:
+    msg: "{{ zookeeper.java_home }}"
 
-- debug: var=ansible_all_ipv4_addresses
-- debug: var=hostvars[inventory_hostname].ip
-- debug: var=ip
+
+#- name: TEST Config | Generate test join config
+#  template:
+#    src: test.j2
+#    dest: "/tmp/jointest.yaml"
+#    mode: "ug=rw,o-rwx"
+#  become: true
+#
+#- debug: var=ansible_all_ipv4_addresses
+#- debug: var=hostvars[inventory_hostname].ip
+#- debug: var=ip

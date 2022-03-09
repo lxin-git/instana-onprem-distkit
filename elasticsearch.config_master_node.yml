@@ -1,0 +1,18 @@
+es_config:
+    bootstrap.memory_lock: true
+    cluster.initial_master_nodes: cinst-k1.fyre.ibm.com
+    cluster.name: test-cluster
+    discovery.seed_hosts: cinst-k1.fyre.ibm.com:9300
+    http.host: 0.0.0.0
+    http.port: 9200
+    node.data: false
+    node.master: true
+    transport.host: 0.0.0.0
+    transport.port: 9300
+es_data_dirs:
+- /mnt/data/elasticsearch/data
+es_heap_size: 3g
+es_log_dir: /mnt/logs/elasticsearch
+es_plugins:
+-   plugin: ingest-attachment
+es_version: 7.10.2

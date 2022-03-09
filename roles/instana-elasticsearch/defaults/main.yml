@@ -1,38 +1,45 @@
 ---
 elasticsearch:
   config_master_node:
-    es_heap_size: "1g"
-    es_plugins:
-     - plugin: ingest-attachment
+    es_version: "7.10.2" # instana required.
+    es_heap_size: "3g"  # instana required.
+    es_data_dirs: # instana required.
+      - "/mnt/data/elasticsearch/data"
+    es_log_dir: "/mnt/logs/elasticsearch" # instana required.
     es_config:
-      cluster.name: "test-cluster"
-      cluster.initial_master_nodes: "cinst-k2.fyre.ibm.com"
-      discovery.seed_hosts: "cinst-k2.fyre.ibm.com:9300"
+      cluster.name: "test-cluster" # instana required.
+      cluster.initial_master_nodes: "cinst-k1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
+      discovery.seed_hosts: "cinst-k1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
       http.host: 0.0.0.0
       http.port: 9200
       node.data: false
       node.master: true
       transport.host: 0.0.0.0
       transport.port: 9300
-      bootstrap.memory_lock: false
-
+      bootstrap.memory_lock: true # instana required.
+    es_plugins:
+     - plugin: ingest-attachment
   config_data_node:
-    es_data_dirs:
-      - "/opt/elasticsearch"
+    es_version: "7.10.2" # instana required.
+    es_heap_size: "2g"  # instana required.
+    es_data_dirs: # instana required.
+      - "/mnt/data/elasticsearch/data"
+    es_log_dir: "/mnt/logs/elasticsearch"
     es_config:
-      cluster.name: "test-cluster"
-      cluster.initial_master_nodes: "cinst-k2.fyre.ibm.com"
-      discovery.seed_hosts: "cinst-k2.fyre.ibm.com:9300"
+      cluster.name: "test-cluster" # instana required.
+      cluster.initial_master_nodes: "cinst-k1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
+      discovery.seed_hosts: "cinst-k1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
       http.host: 0.0.0.0
       http.port: 9200
       node.data: true
       node.master: false
       transport.host: 0.0.0.0
       transport.port: 9300
-      bootstrap.memory_lock: false
+      bootstrap.memory_lock: true # instana required
     es_plugins:
       - plugin: ingest-attachment
 
+# Other default settings from elastic official playbook
 es_version: "7.17.0"
 es_use_snapshot_release: false
 oss_version: false

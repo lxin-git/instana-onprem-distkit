@@ -1,12 +1,11 @@
 ---
 cassandra:
-  java_home: "{{ instana_java_home }}"
+  java_home: "{{ instana_java_home }}" # consider to replace back to jre8, now just fix jre11 options, need more test
   version_catogory: "311x"
   version: 3.11.10
   download_mirror: https://archive.apache.org/dist/cassandra
   # eg.: https://archive.apache.org/dist/cassandra/redhat/311x/cassandra-3.11.10-1.noarch.rpm
   cluster_name: "onprem"
-
   configuration:
     conf_dir: /etc/cassandra
     data_dir: /mnt/metrics/cassandra
@@ -15,3 +14,6 @@ cassandra:
     heap_newsize: 4G
     fd_limit: 1048576
     jvm_opts: "-Dcassandra.allow_unsafe_aggressive_sstable_expiration=true -XX:+IgnoreUnrecognizedVMOptions" # fix jre11 issue
+
+    
+cassandra_package_name: "cassandra-{{ cassandra.version }}-1.noarch.rpm"
