@@ -6,8 +6,8 @@
 | Host                  | zookeeper | kafka | clickhouse | cockroachdb | cassandra | elasticsearch | nfs |
 |-----------------------|:---------:|:-----:|:----------:|:-----------:|:---------:|:-------------:|:---:|
 | tdata-d1.fyre.ibm.com | X         | X     | X          |             | X         | X (master)    |     |
-| tdata-d1.fyre.ibm.com | X         |       | X          | X           | X         | X(data)       |     |
-| tdata-d1.fyre.ibm.com | X         | X     |            | X           |           | X(data)       | X   |
+| tdata-d2.fyre.ibm.com | X         |       | X          | X           | X         | X(data)       |     |
+| tdata-d3.fyre.ibm.com | X         | X     |            | X           |           | X(data)       | X   |
 
 check for detailed configure in [tdata.ini](inventory/sample/tdata.ini).
 
