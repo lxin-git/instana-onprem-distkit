@@ -9,7 +9,7 @@
 | tdata-d1.fyre.ibm.com | X         |       | X          | X           | X         | X(data)       |     |
 | tdata-d1.fyre.ibm.com | X         | X     |            | X           |           | X(data)       | X   |
 
-check for detailed configure in tdata.ini.
+check for detailed configure in [tdata.ini](inventory/sample/tdata.ini).
 
 ## Prerequisite
 
