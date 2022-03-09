@@ -81,7 +81,7 @@ mount /dev/datavg/nfslv /mnt/nfs
 
 Review and edit the inventory file in `inventory/sample/inventory.ini` , you can also take `tdata.ini` as an example.
 
-Review and edit the configuration file in `inventory/sample/group_vars/all/all.yml`, all the instana required configuration placed here, check every parameter that marked as `# instana required.`, change them if you want, if not sure how to set the value, let it be the default in the sample.
+Review and edit the configuration file in  [`inventory/sample/group_vars/all/all.yml`](inventory/sample/group_vars/all/all.yml), all the instana required configuration placed here, check every parameter that marked as `# instana required.`, change them if you want, if not sure how to set the value, let it be the default in the sample.
 
 Now, ready to deploy all those components:
 ```
