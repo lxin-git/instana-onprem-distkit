@@ -1,0 +1,37 @@
+---
+- hosts: dbsvrs
+  gather_facts: False
+  roles:
+    - { role: dbsvrs-common }
+    - { role: instana-repo,  when: instana_repo_enabled }
+    - { role: instana-jre }
+
+- hosts: zookeeper_node
+  gather_facts: True
+  roles:
+    - { role: instana-zookeeper }
+
+- hosts: kafka_node
+  gather_facts: True
+  roles:
+    - { role: instana-kafka }
+
+- hosts: clickhouse_node
+  gather_facts: True
+  roles:
+    - { role: instana-clickhouse }
+
+- hosts: cockroachdb_node
+  gather_facts: True
+  roles:
+    - { role: instana-cockroachdb }
+
+- hosts: cassandra_node
+  gather_facts: True
+  roles:
+    - { role: instana-cassandra }
+
+- hosts: elasticsearch_node
+  gather_facts: True
+  roles:
+    - { role: instana-elasticsearch }

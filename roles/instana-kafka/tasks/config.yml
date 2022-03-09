@@ -1,0 +1,39 @@
+---
+- name: convert kafka members to dict
+  set_fact:
+    kafka_member_dict: "{{ kafka_member_dict | default([]) + [{'key': index + 1, 'value': item}] }}"
+  with_items:
+    - "{{ kafka.members }}"
+  loop_control:
+    index_var: index
+  run_once: yes
+
+- name: set kafka member index
+  set_fact:
+    kafka_member_index: "{{ kafka_member_dict | selectattr('value', 'equalto', kafka.member_id) | map(attribute='key') | first }}"
+
+- name: create kafka config dir
+  file:
+    path: "{{ kafka.configuration.conf_dir }}"
+    state: directory
+    mode: '0755'
+    owner: kafka
+    group: kafka
+
+- name: create kafka config file
+  template:
+    src: server.properties.j2
+    dest: "{{ kafka.configuration.conf_dir }}/server.properties"
+    mode: '0644'
+    owner: kafka
+    group: kafka
+  notify: Restart Kafka
+
+- name: create env file
+  template:
+    src: kafka.env.j2
+    dest: "{{ kafka.configuration.conf_dir }}/kafka.env"
+    mode: '0644'
+    owner: kafka
+    group: kafka
+  notify: Restart Kafka

@@ -1,0 +1,17 @@
+---
+cassandra:
+  java_home: "{{ instana_java_home }}"
+  version_catogory: "311x"
+  version: 3.11.10
+  download_mirror: https://archive.apache.org/dist/cassandra
+  # eg.: https://archive.apache.org/dist/cassandra/redhat/311x/cassandra-3.11.10-1.noarch.rpm
+  cluster_name: "onprem"
+
+  configuration:
+    conf_dir: /etc/cassandra
+    data_dir: /mnt/metrics/cassandra
+    log_dir: /var/log/cassandra
+    max_heap_size: 16G
+    heap_newsize: 4G
+    fd_limit: 1048576
+    jvm_opts: "-Dcassandra.allow_unsafe_aggressive_sstable_expiration=true -XX:+IgnoreUnrecognizedVMOptions" # fix jre11 issue

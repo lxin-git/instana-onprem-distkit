@@ -1,0 +1,11 @@
+---
+# tasks file for jre
+
+- name: Install JRE {{ instana_java_package }}
+  yum:
+    name: "{{ instana_java_package }}"
+    state: present
+    update_cache: yes
+  become: true
+  environment: "{{ proxy_env }}"
+  when: instana_repo_enabled

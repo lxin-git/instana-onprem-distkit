@@ -1,0 +1,19 @@
+# {{ ansible_managed }}
+
+[Unit]
+Description=Kafka Daemon
+Documentation=http://kafka.apache.org
+Before=
+After=network.target,remote-fs.target
+
+[Service]
+EnvironmentFile={{ kafka.configuration.conf_dir }}/kafka.env
+WorkingDirectory={{ kafka.install_dir }}/{{ kafka.version }}
+Type=simple
+User=kafka
+Group=kafka
+ExecStart={{ kafka.install_dir }}/{{ kafka.version }}/bin/kafka-server-start.sh {{ kafka.configuration.conf_dir }}/server.properties
+ExecStop={{ kafka.install_dir }}/{{ kafka.version }}/bin/kafka-server-stop.sh
+
+[Install]
+WantedBy=multi-user.target

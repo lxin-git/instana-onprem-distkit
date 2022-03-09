@@ -1,0 +1,14 @@
+---
+- name: Enable CockroachDB
+  systemd:
+    name: cockroachdb
+    enabled: yes
+    state: started
+    daemon_reload: yes
+  listen: Update CockroachDB
+
+- name: Restart CockroachDB
+  systemd:
+    name: cockroachdb
+    state: restarted
+  listen: Update CockroachDB

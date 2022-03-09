@@ -1,0 +1,31 @@
+# {{ ansible_managed }}
+
+# The number of milliseconds of each tick
+tickTime={{ zookeeper.configuration.tick_time }}
+
+# The number of ticks that the initial
+# synchronization phase can take
+initLimit={{ zookeeper.configuration.init_limit }}
+
+# The number of ticks that can pass between
+# sending a request and getting an acknowledgement
+syncLimit={{ zookeeper.configuration.sync_limit }}
+
+# the directory where the snapshot is stored.
+dataDir={{ zookeeper.configuration.data_dir }}
+
+# the port at which the clients will connect
+clientPort={{ zookeeper.configuration.client_port }}
+maxClientCnxns={{ zookeeper.configuration.max_client_cnxns }}
+
+# ZooKeeper auto purge feature retains the autopurge.snapRetainCount
+# most recent snapshots and the corresponding transaction logs in the dataDir
+# and dataLogDir respectively and deletes the rest. Defaults to 3. Minimum value is 3.
+autopurge.snapRetainCount={{ zookeeper.configuration.autopurge_snapretain_count }}
+
+# The time interval in hours for which the purge task has to be triggered.
+# Set to a positive integer (1 and above) to enable the auto purging. Defaults to 0.
+autopurge.purgeInterval={{ zookeeper.configuration.purge_interval }}
+
+# servers
+dynamicConfigFile={{ zookeeper.configuration.conf_dir }}/zookeeper.dynamic.cfg

@@ -1,0 +1,13 @@
+---
+# vars file for clickhouse
+#
+clickhouse_package:
+  - clickhouse-client
+  - clickhouse-server
+  - clickhouse-common-static
+
+clickhouse_path_configdir: "/etc/clickhouse-server"
+clickhouse_path_logdir: "{{ clickhouse.log_dir }}"
+clickhouse_path_data: "{{ clickhouse.data_dir }}/"
+clickhouse_path_tmp: "{{ clickhouse.data_dir }}/tmp/"
+clickhouse_service: 'clickhouse-server.service'

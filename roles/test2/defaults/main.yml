@@ -1,0 +1,26 @@
+---
+# Customized for Instana
+zookeeper_java_home: /opt/instana/jre11
+zookeeper_version: 3.6.3
+zookeeper:
+  #-----------------------------------
+  # Instana required default settings
+  #-----------------------------------
+  java_home: "{{ instana_java_home }}"
+  version: 3.6.3
+  tick_time: 2000
+  init_limit: 10
+  sync_limit: 5
+  data_dir: /mnt/data/zookeeper
+  client_port: 2181
+  max_client_cnxns: 0
+  autopurge_snapretain_count: 20
+  purge_interval: 1
+  members: "{{ groups['zookeeper_node'] | map('extract', hostvars, 'ansible_default_ipv4') | map(attribute='address') | list }}"
+  heap_size: 2048
+  jvmflags: '-XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled'
+  #------------------------------------
+
+
+  install_dir: /opt/zookeeper
+  conf_dir: /etc/zookeeper

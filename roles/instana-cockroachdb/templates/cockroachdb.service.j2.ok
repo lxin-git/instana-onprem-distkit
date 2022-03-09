@@ -1,0 +1,22 @@
+# {{ ansible_managed }}
+[Service]
+Type=simple
+User=cockroachdb
+Group=cockroachdb
+Restart=always
+RestartSec=30
+ExecStart={{ cockroachdb.install_dir }}/{{ cockroachdb.version }}/cockroach start \
+  --store={{ cockroachdb.configuration.data_dir }} \
+  --log-dir={{ cockroachdb.configuration.log_dir }} \
+  --listen-addr={{ ansible_hostname }}:{{ cockroachdb.configuration.port }} \
+  --http-addr={{ ansible_hostname }}:{{ cockroachdb.configuration.http_port }} \
+  --join={{ groups["cockroachdb_node"] | join(":{0},".format(cockroachdb.configuration.port)) }}:{{ cockroachdb.configuration.port }} \
+  --pid-file={{ cockroachdb.install_dir }}/{{ cockroachdb.version }}/cockroach.pid \
+  --insecure
+EnvironmentFile=-/etc/cockroachdb/systemd.env
+ExecStop={{ cockroachdb.install_dir }}/{{ cockroachdb.version }}/cockroach quit --insecure --host={{ ansible_hostname }}:{{ cockroachdb.configuration.port }}
+LimitCORE=infinity
+LimitNOFILE=500000
+
+[Install]
+WantedBy=multi-user.target

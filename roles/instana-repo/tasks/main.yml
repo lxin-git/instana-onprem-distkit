@@ -1,0 +1,30 @@
+---
+
+- name: Importing GPG key for instana-distonprem
+  rpm_key:
+    state: present
+    key: https://packages.instana.io/Instana.gpg
+  become: true
+  environment: "{{ proxy_env }}"
+  register: import_instana_gpg
+
+- name: Enable Instana-DistOnPrem repo for RedHat/CentOS
+  yum_repository:
+    file: Instana-DistOnPrem
+    name: instana-distonprem
+    description: Instana Distributed OnPrem Installation Package Repo
+    baseurl: https://_:{{ instana_agent_key }}@packages.instana.io/release/distonprem/rpm/generic/x86_64
+    enabled: yes
+    gpgcheck: yes
+    repo_gpgcheck: yes
+    gpgkey: https://packages.instana.io/Instana.gpg
+    priority: "5"
+    sslverify: yes
+    skip_if_unavailable: yes
+  become: true
+
+# limitation: Instana Repository metadata signatures are checked by yum using a separate set of keys
+# which it stores under /var/cache/yum/repos/. https://github.com/ansible/ansible/issues/20711
+- name: Make cache to FORCE gpg key imported.
+  command: "yum makecache -y fast"
+  when: import_instana_gpg.changed

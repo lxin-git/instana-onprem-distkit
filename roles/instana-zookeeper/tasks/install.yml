@@ -1,0 +1,74 @@
+---
+- name: add zookeeper group
+  group:
+    name: zookeeper
+    state: present
+
+- name: add zookeeper user
+  user:
+    name: zookeeper
+    group: zookeeper
+
+- set_fact:
+    zk_package_name: apache-zookeeper-{{ zookeeper.version }}-bin.tar.gz
+
+- name: check zookeeper package
+  stat: path={{ package_download_path }}/{{ zk_package_name }}
+  register: zk_package_exists
+
+- name: download zookeeper tar if not downloaded
+  get_url: url={{ zookeeper.download_mirror }}/zookeeper-{{ zookeeper.version }}/{{ zk_package_name }} dest={{ package_download_path }}
+  when: not zk_package_exists.stat.exists
+
+- name: create zookeeper dir
+  file:
+    path: "{{ zookeeper.install_dir }}"
+    state: directory
+    mode: '0755'
+    owner: zookeeper
+    group: zookeeper
+
+- name: create zooKeeper version dir
+  file:
+    path: "{{ zookeeper.install_dir }}/{{ zookeeper.version }}"
+    state: directory
+    mode: '0755'
+    owner: zookeeper
+    group: zookeeper
+  register: zookeeper_version_dir
+
+- name: unarchive zookeeper package
+  unarchive:
+    src: "{{ package_download_path }}/{{ zk_package_name }}"
+    dest: "{{ zookeeper.install_dir }}/{{ zookeeper.version }}"
+    copy: no
+  when: zookeeper_version_dir.changed
+
+- name: delete package downloaded if needed
+  file: path={{ package_download_path }}/{{ zk_package_name }} state=absent
+  when: force_cleanup is defined and force_cleanup == "True"
+
+- name: create zookeeper data dir
+  file:
+    path: "{{ zookeeper.configuration.data_dir }}"
+    state: directory
+    owner: zookeeper
+    group: zookeeper
+    mode: '0755'
+
+- name: create zookeeper log dir
+  file:
+    path: "{{ zookeeper.configuration.log_dir }}"
+    state: directory
+    owner: zookeeper
+    group: zookeeper
+    mode: '0755'
+
+- name: create zookeeper service
+  template:
+    src: zookeeper.service.j2
+    dest: "/etc/systemd/system/zookeeper.service"
+    mode: '0644'
+    owner: zookeeper
+    group: zookeeper
+  notify: Update ZooKeeper

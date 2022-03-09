@@ -1,0 +1,53 @@
+---
+- name: add cassandra group
+  group:
+    name: cassandra
+    state: present
+
+- name: add cassandra user
+  user:
+    name: cassandra
+    group: cassandra
+
+- debug:
+    msg: "{{ cassandra.version}}"
+
+# - set_fact:
+#     cassandra_package_name: "cassandra_{{ cassandra.scala_version }}-{{ cassandra.version }}.tgz"
+
+- debug:
+    msg: "{{ cassandra.version}}"
+
+
+- name: check cassandra package
+  stat: path={{ package_download_path }}/{{ cassandra_package_name }}
+  register: cassandra_package_exists
+
+- name: download cassandra tar if not downloaded
+  get_url: url={{ cassandra.download_mirror }}/redhat/{{ cassandra.version_catogory }}/{{ cassandra_package_name }} dest={{ package_download_path }}
+  when: not cassandra_package_exists.stat.exists
+
+- name: delete package downloaded if needed
+  file: path={{ package_download_path }}/{{ cassandra_package_name }} state=absent
+  when: force_cleanup is defined and force_cleanup == "True"
+
+- name: create cassandra data dir
+  file:
+    path: "{{ cassandra.configuration.data_dir }}"
+    state: directory
+    owner: cassandra
+    group: cassandra
+    mode: '0755'
+
+- name: set cassandra loggers dir
+  file:
+    path: "{{ cassandra.configuration.log_dir }}"
+    state: directory
+    owner: cassandra
+    group: cassandra
+    mode: '0755'
+
+- name: YUM local | install cassandra via local rpm
+  yum:
+    name: "{{ package_download_path }}/{{ cassandra_package_name }}"
+    state: present

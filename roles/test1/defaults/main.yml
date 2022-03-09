@@ -1,0 +1,53 @@
+---
+
+cockroachdb:
+  java_home: "{{ instana_java_home }}"
+  version: 21.1.7
+  install_dir: /opt/cockroachdb
+  download_mirror: https://binaries.cockroachdb.com
+  # https://binaries.cockroachdb.com/cockroach-v21.1.7.linux-amd64.tgz
+
+  configuration:
+    port: 26257
+    http_port: 8001
+    data_dir: /mnt/data/cockroachdb
+    log_dir: /var/log/cockroachdb
+
+
+clickhouse:
+  # For server.xml.j2
+  version: 21.3.8.76
+  data_dir: /mnt/traces/clickhouse
+  log_dir: "/var/log/clickhouse-server"
+  logger_level: information
+  logger_size: 200M
+  logger_count: 10
+  http_port: 8123
+  tcp_port: 9000
+  dynamic_file: /etc/clickhouse-server/dynamic.xml
+  interserver_http_port: 9009
+  listen_host:
+    - "0.0.0.0"
+  configuration:
+    max_connections: 16384
+    keep_alive_timeout: 3
+    max_concurrent_queries: 100
+    uncompressed_cache_size: 8589934592
+    mark_cache_size: 5368709120
+    builtin_dictionaries_reload_interval: 3600
+    max_session_timeout: 3600
+    default_session_timeout: 60
+
+  # For dynamic.xml.j2
+  cluster_name: local
+  shards:
+    0:
+      - { host: "cinst-k1.fyre.ibm.com", port: 9000 }
+      - { host: "cinst-k2.fyre.ibm.com", port: 9000 }
+    1:
+      - { host: "cinst-k3.fyre.ibm.com", port: 9000 }
+      - { host: "cinst-k4.fyre.ibm.com", port: 9000 }
+  zknodes:
+    - { host: "9.112.255.160", port: 2181 }
+    - { host: "9.112.255.163", port: 2181 }
+    - { host: "9.123.116.50", port: 2181 }

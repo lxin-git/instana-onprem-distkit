@@ -1,0 +1,18 @@
+---
+
+#- hosts: dbsvrs
+#  gather_facts: False
+#  roles:
+#    - { role: dbsvrs-common }
+#    - { role: instana-repo,  when: instana_repo_enabled }
+#    - { role: jre }
+#
+#- hosts: zookeeper_node
+#  gather_facts: True
+#  roles:
+#    - { role: instana-zookeeper }
+
+- hosts: clickhouse_node
+  gather_facts: True
+  roles:
+    - { role: ansible-clickhouse }

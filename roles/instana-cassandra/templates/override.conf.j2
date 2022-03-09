@@ -1,0 +1,6 @@
+[Service]
+Environment=JAVA_HOME={{ cassandra.java_home }}
+Environment=MAX_HEAP_SIZE="{{ cassandra.configuration.max_heap_size }}"
+Environment=HEAP_NEWSIZE="{{ cassandra.configuration.heap_newsize }}"
+Environment=JVM_OPTS=" {{ cassandra.configuration.jvm_opts }} "
+Environment=FD_LIMIT={{ cassandra.configuration.fd_limit }}

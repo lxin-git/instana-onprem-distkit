@@ -1,0 +1,34 @@
+---
+
+#- hosts: dbsvrs
+#  gather_facts: False
+#  roles:
+#    - { role: dbsvrs-common }
+#
+#- hosts: zookeeper_node
+#  gather_facts: True
+#  roles:
+#    - { role: instana-repo,  when: instana_repo_enabled }
+#    - { role: jre }
+#    - { role: instana-zookeeper }
+
+#- hosts: clickhouse_node
+#  gather_facts: True
+#  roles:
+#     - { role: instana-clickhouse }
+
+#     - { role: teset1 }
+#- hosts: test2
+#  gather_facts: false
+#  roles:
+#     - { role: test2 }
+#- hosts: test1
+#  gather_facts: true
+#  tasks:
+#    - debug:
+#        msg: "{{ groups['zookeeper_node'] | list }}.cinst-k2.fyre.ibm.com|int)"
+
+- hosts: cassandra_node
+  gather_facts: True
+  roles:
+     - { role: testes }

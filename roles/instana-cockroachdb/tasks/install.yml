@@ -1,0 +1,91 @@
+---
+- name: add cockroachdb group
+  group:
+    name: cockroachdb
+    state: present
+
+- name: add cockroachdb user
+  user:
+    name: cockroachdb
+    group: cockroachdb
+
+- debug:
+    msg: "{{ cockroachdb.version}}"
+
+- set_fact:
+    cockroachdb_package_name: "cockroach-v{{ cockroachdb.version}}.linux-amd64.tgz"
+
+- name: check cockroachdb package
+  stat: path={{ package_download_path }}/{{ cockroachdb_package_name }}
+  register: cockroachdb_package_exists
+
+- name: download cockroachdb tar if not downloaded
+  get_url: url={{ cockroachdb.download_mirror }}/{{ cockroachdb_package_name }} dest={{ package_download_path }}
+  when: not cockroachdb_package_exists.stat.exists
+
+- name: create cockroachdb dir
+  file:
+    path: "{{ cockroachdb.install_dir }}"
+    state: directory
+    mode: '0755'
+    owner: cockroachdb
+    group: cockroachdb
+
+- name: create cockroachdb version dir
+  file:
+    path: "{{ cockroachdb.install_dir }}/{{ cockroachdb.version }}"
+    state: directory
+    mode: '0755'
+    owner: cockroachdb
+    group: cockroachdb
+  register: cockroachdb_version_dir
+
+- name: unarchive cockroachdb package
+  unarchive:
+    src: "{{ package_download_path }}/{{ cockroachdb_package_name }}"
+    dest: "{{ cockroachdb.install_dir }}/{{ cockroachdb.version}}"
+    copy: no
+    extra_opts: [--strip-components=1]
+  when: cockroachdb_version_dir.changed
+
+- name: delete package downloaded if needed
+  file: path={{ package_download_path }}/{{ cockroachdb_package_name }} state=absent
+  when: force_cleanup is defined and force_cleanup == "True"
+
+- name: create cockroachdb data dir
+  file:
+    path: "{{ cockroachdb.configuration.data_dir }}"
+    state: directory
+    owner: cockroachdb
+    group: cockroachdb
+    mode: '0755'
+
+- name: set cockroachdb loggers dir
+  file:
+    path: "{{ cockroachdb.configuration.log_dir }}"
+    state: directory
+    owner: cockroachdb
+    group: cockroachdb
+    mode: '0755'
+
+- name: set cockroachdb certs dir # need develop certs related tasks.
+  file:
+    path: "{{ cockroachdb.configuration.certs_dir }}"
+    state: directory
+    owner: cockroachdb
+    group: cockroachdb
+    mode: '0755'
+
+#- name: Check status
+#  shell: "{{ cockroachdb.install_dir }}/{{ cockroachdb.version }}/cockroach node status --host {{ inventory_hostname }} --insecure"
+#  register: cockroachdb_node_status
+#  become_user: cockroachdb
+
+- name: create cockroachdb service
+  template:
+    src: cockroachdb.service.j2
+    dest: "/etc/systemd/system/cockroachdb.service"
+    owner: cockroachdb
+    group: cockroachdb
+    mode: '0644'
+  notify: Update CockroachDB

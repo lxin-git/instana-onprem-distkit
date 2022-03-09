@@ -1,0 +1,78 @@
+---
+- name: add kafka group
+  group:
+    name: kafka
+    state: present
+
+- name: add kafka user
+  user:
+    name: kafka
+    group: kafka
+
+- debug:
+    msg: "{{ kafka.version}}"
+
+- set_fact:
+    kafka_package_name: "kafka_{{ kafka.scala_version }}-{{ kafka.version }}.tgz"
+
+- name: check kafka package
+  stat: path={{ package_download_path }}/{{ kafka_package_name }}
+  register: kafka_package_exists
+
+- name: download kafka tar if not downloaded
+  get_url: url={{ kafka.download_mirror }}/{{ kafka.version }}/{{ kafka_package_name }} dest={{ package_download_path }}
+  when: not kafka_package_exists.stat.exists
+
+- name: create kafka dir
+  file:
+    path: "{{ kafka.install_dir }}"
+    state: directory
+    mode: '0755'
+    owner: kafka
+    group: kafka
+
+- name: create kafka version dir
+  file:
+    path: "{{ kafka.install_dir }}/{{ kafka.version }}"
+    state: directory
+    mode: '0755'
+    owner: kafka
+    group: kafka
+  register: kafka_version_dir
+
+- name: unarchive kafka package
+  unarchive:
+    src: "{{ package_download_path }}/{{ kafka_package_name }}"
+    dest: "{{ kafka.install_dir }}/{{ kafka.version}}"
+    copy: no
+    extra_opts: [--strip-components=1]
+  when: kafka_version_dir.changed
+
+- name: delete package downloaded if needed
+  file: path={{ package_download_path }}/{{ kafka_package_name }} state=absent
+  when: force_cleanup is defined and force_cleanup == "True"
+
+- name: create kafka data dir
+  file:
+    path: "{{ kafka.configuration.data_dir }}"
+    state: directory
+    owner: kafka
+    group: kafka
+    mode: '0755'
+
+- name: set kafka loggers dir
+  file:
+    path: "{{ kafka.configuration.log_dir }}"
+    state: directory
+    owner: kafka
+    group: kafka
+    mode: '0755'
+
+- name: create kafka service
+  template:
+    src: kafka.service.j2
+    dest: "/etc/systemd/system/kafka.service"
+    owner: kafka
+    group: kafka
+    mode: '0644'
+  notify: Update Kafka

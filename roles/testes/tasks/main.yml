@@ -1,0 +1,16 @@
+
+
+- name: MASTER | load settings
+  include_vars: elasticsearch.config_master_node.yml
+  when: es_role == 'master'
+
+- name: DATA | load settings
+  include_vars: elasticsearch.config_data_node.yml
+  when: es_role == 'data'
+
+
+#- name: Dump all variables
+#  action: template src=dumpall.j2 dest=/tmp/ansible_dump.all
+
+- debug:
+    msg: "{{ es_plugins }}"

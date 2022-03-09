@@ -1,0 +1,18 @@
+
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: generate es master node var file.
+      copy:
+        content: "{{ elasticsearch.config_master_node | to_nice_yaml }}"
+        dest: "elasticsearch.config_master_node.yml"
+    - name: generate es data node var file.
+      copy:
+        content: "{{ elasticsearch.config_data_node | to_nice_yaml }}"
+        dest: "elasticsearch.config_data_node.yml"
+
+- hosts: elasticsearch_node
+  gather_facts: true
+  roles:
+    - { role: testes }
+  #vars: "{{ elasticsearch.es_master_config }}"

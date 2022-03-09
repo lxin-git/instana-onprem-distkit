@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+{{ ansible_managed | comment('xml') }}
+<yandex>
+  <macros>
+    <cluster>{{ clickhouse.cluster_name }}</cluster>
+    <replica>{{ inventory_hostname_short }}</replica>
+    <shard>{{ clickhouse_shards_idx }}</shard>
+  </macros>
+  <remote_servers>
+
+{% for shard_name, replicas in clickhouse.shards.items() | list %}
+    <{{ clickhouse.cluster_name }}>
+      <shard>
+        <internal_replication>true</internal_replication>
+{% for replica in replicas %}
+        <replica>
+          <host>{{ replica['host'] }}</host>
+          <port>{{ replica['port'] | default(9000) }}</port>
+        </replica>
+{% endfor %}
+      </shard>
+    </{{ clickhouse.cluster_name }}>
+{% endfor %}
+  </remote_servers>
+
+  <zookeeper_servers>
+{% for server in clickhouse.zknodes %}
+    <node index="{{loop.index}}">
+      <host>{{ server['host'] }}</host>
+      <port>{{ zookeeper_client_port }}</port>
+    </node>
+{% endfor %}
+    <session_timeout_ms>60000</session_timeout_ms>
+  </zookeeper_servers>
+</yandex>

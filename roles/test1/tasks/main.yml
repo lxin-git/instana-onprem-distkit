@@ -1,0 +1,30 @@
+
+#- name: Print all available facts
+#  ansible.builtin.debug:
+#    var: ansible_facts
+#
+#
+#- name: check var inside play
+#  debug:
+#    msg: "{{ ansible_default_ipv4 }}"
+#
+#
+#- name: check var inside play
+#  debug:
+#    msg: "{{ inventory_hostname }}"
+#
+#- name: check var inside play
+#  debug:
+#    msg: "{{ inventory_hostname_short }}"
+
+
+- name: TEST Config | Generate test join config
+  template:
+    src: test.j2
+    dest: "/tmp/jointest.yaml"
+    mode: "ug=rw,o-rwx"
+  become: true
+
+- debug: var=ansible_all_ipv4_addresses
+- debug: var=hostvars[inventory_hostname].ip
+- debug: var=ip

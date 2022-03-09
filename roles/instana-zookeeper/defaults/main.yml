@@ -1,0 +1,48 @@
+---
+#-------------------------------------------------
+# Default properties may be replaced by group_vars
+#-------------------------------------------------
+zookeeper:
+  java_home: "{{ instana_java_home }}"
+  version: 3.6.3
+  install_dir: /opt/zookeeper
+  download_mirror: https://archive.apache.org/dist/zookeeper
+
+  configuration:
+    heap_size: 2048
+    jvmflags: '-XX:+UseConcMarkSweepGC -XX:+CMSParallelRemarkEnabled'
+    client_port: 2181
+    data_dir: /mnt/data/zookeeper
+    conf_dir: /etc/zookeeper
+    log_dir: /var/log/zookeeper
+    log_file: zookeeper.log
+    log_level: INFO
+    log_max_file_size: 265MB
+    log_max_backup_index: 20
+    max_client_cnxns: 0
+    tick_time: 2000
+    init_limit: 10
+    sync_limit: 5
+    autopurge_snapretain_count: 20
+    purge_interval: 1
+    members: "{{ groups['zookeeper_node'] | map('extract', hostvars, 'ansible_default_ipv4') | map(attribute='address') | list }}"
+    member_id: "{{ ansible_default_ipv4.address }}"
+#-------------------------------------------------
+
+    # The following configuration considered to be deprecated.
+    global_outstanding_limit: 1000
+    prealloc_size: 64M
+    snap_count: 100000
+    fsync_warning_threshold_ms: 1000
+    server_username: foo
+    server_password: foz
+    clients:
+      - username: bar
+        password: baz
+    jmx_host: 127.0.0.1
+    jmx_port: 9181
+    jmx_rmi_port: 9182
+    jmx_username: foz
+    jmx_password: baz
+    jmx_role: readonly
+    4lw_commands_whitelist: srvr,stat,mntr

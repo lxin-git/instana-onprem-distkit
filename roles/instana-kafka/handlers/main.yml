@@ -1,0 +1,14 @@
+---
+- name: Enable Kafka
+  systemd:
+    name: kafka
+    enabled: yes
+    state: started
+    daemon_reload: yes
+  listen: Update Kafka
+
+- name: Restart Kafka
+  systemd:
+    name: kafka
+    state: restarted
+  listen: Update Kafka

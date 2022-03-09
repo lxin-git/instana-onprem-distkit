@@ -1,0 +1,51 @@
+---
+- name: create cassandra service override dir
+  file:
+    path: "/etc/systemd/system/cassandra.service.d/"
+    state: directory
+    mode: '0755'
+    owner: cassandra
+    group: cassandra
+
+- name: create cassandra service override file
+  template:
+    src: override.conf.j2
+    dest: "/etc/systemd/system/cassandra.service.d/override.conf"
+    mode: '0644'
+    owner: cassandra
+    group: cassandra
+  notify: Update Cassandra
+
+# comment this as yum install will auto generate /etc/cassandra as conf dir
+#- name: create cassandra config dir
+#  file:
+#    path: "{{ cassandra.configuration.conf_dir }}"
+#    state: directory
+#    mode: '0755'
+#    owner: cassandra
+#    group: cassandra
+
+- name: create cassandra config file
+  template:
+    src: cassandra.yaml.j2
+    dest: "{{ cassandra.configuration.conf_dir }}/conf/cassandra.yaml"
+    mode: '0644'
+    owner: cassandra
+    group: cassandra
+  notify: Update Cassandra
+
+- name: create sysvinit defaults file
+  template:
+    src: cassandra.env.j2
+    dest: "/etc/default/cassandra"
+    mode: '0644'
+    owner: cassandra
+    group: cassandra
+  notify: Update Cassandra
+
+- name: Replace ThreadPriorityPolicy setting in jvmoptions # fix jre11 issue for instana
+  lineinfile:
+    path: /etc/cassandra/conf/jvm.options
+    regexp: '^\-XX\:ThreadPriorityPolicy\=42'
+    line: -XX:ThreadPriorityPolicy=1
+  notify: Update Cassandra

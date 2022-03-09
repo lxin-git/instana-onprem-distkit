@@ -1,0 +1,14 @@
+---
+- name: Enable Cassandra
+  systemd:
+    name: cassandra
+    enabled: yes
+    state: started
+    daemon_reload: yes
+  listen: Update Cassandra
+
+- name: Restart Cassandra
+  systemd:
+    name: cassandra
+    state: restarted
+  listen: Update Cassandra
