@@ -28,7 +28,7 @@
 #    - debug:
 #        msg: "{{ groups['zookeeper_node'] | list }}.cinst-k2.fyre.ibm.com|int)"
 
-- hosts: zookeeper_node
+- hosts: kafka_node
   gather_facts: True
   roles:
-     - { role: test1 }
+     - { role: instana-kafka }

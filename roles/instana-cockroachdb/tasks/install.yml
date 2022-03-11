@@ -76,10 +76,18 @@
     group: cockroachdb
     mode: '0755'
 
-#- name: Check status
-#  shell: "{{ cockroachdb.install_dir }}/{{ cockroachdb.version }}/cockroach node status --host {{ inventory_hostname }} --insecure"
-#  register: cockroachdb_node_status
-#  become_user: cockroachdb
+
+- name: set fact for cockroachdb_join_list
+  set_fact:
+    cockroachdb_join_list: |-
+      {%- set list = [] -%}
+      {% for host in groups["cockroachdb_node"] -%}
+        {% set join_ip = hostvars[host].ip -%}
+        {% set join_port = cockroachdb['configuration']['port'] -%}
+        {% set ip_port = join_ip ~ ':' ~ join_port -%}
+        {{ list.append(ip_port) }}
+      {%- endfor -%}
+      {{ list }}
 
 - name: create cockroachdb service
   template:

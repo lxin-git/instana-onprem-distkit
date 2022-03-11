@@ -79,15 +79,16 @@
   notify: restart-ch
   become: true
 
+
 ## keep posibbility for generate more settings in users.d/users.xml
-- name: Config | Generate users config
-  template:
-    src: users.j2
-    dest: "{{ clickhouse_path_configdir }}/users.d/users.xml"
-    owner: "{{ clickhouse_user | default('clickhouse') }}"
-    group: "{{ clickhouse_group | default('clickhouse') }}"
-    mode: "ug=rw,o-rwx"
-  become: true
+#- name: Config | Generate users config
+#  template:
+#    src: users.j2
+#    dest: "{{ clickhouse_path_configdir }}/users.d/users.xml"
+#    owner: "{{ clickhouse_user | default('clickhouse') }}"
+#    group: "{{ clickhouse_group | default('clickhouse') }}"
+#    mode: "ug=rw,o-rwx"
+#  become: true
 
 - name: Config | Generate remote_servers config
   template:

@@ -40,7 +40,7 @@ elasticsearch:
       - plugin: ingest-attachment
 
 # Other default settings from elastic official playbook
-es_version: "7.17.0"
+es_version: "7.10.2"
 es_use_snapshot_release: false
 oss_version: false
 es_package_name: "elasticsearch"

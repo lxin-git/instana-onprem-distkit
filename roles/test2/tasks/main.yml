@@ -1,4 +1,0 @@
-
-- name: check var outside play from set_facts
-  debug:
-    msg: "{{ zookeeper.install_dir }}"

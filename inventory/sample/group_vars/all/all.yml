@@ -106,15 +106,16 @@ clickhouse:
   cluster_name: local # instana required.
   shards:
     0:
-      - { host: "cinst-k1.fyre.ibm.com", port: 9000 }
-      - { host: "cinst-k2.fyre.ibm.com", port: 9000 }
+      - { host: "tdata-d1.fyre.ibm.com", port: 9000 }
+      - { host: "tdata-d2.fyre.ibm.com", port: 9000 }
     #1:
-    #  - { host: "cinst-k3.fyre.ibm.com", port: 9000 }
-    #  - { host: "cinst-k4.fyre.ibm.com", port: 9000 }
+    #  - { host: "tdata-d3.fyre.ibm.com", port: 9000 }
+    #  - { host: "tdata-d4.fyre.ibm.com", port: 9000 }
   zknodes:
-    - { host: "9.112.255.160", port: 2181 }
-    - { host: "9.112.255.163", port: 2181 }
-    - { host: "9.123.116.50", port: 2181 }
+    - { host: "9.112.253.42", port: 2181 }
+    - { host: "9.112.253.60", port: 2181 }
+    - { host: "9.112.253.94", port: 2181 }
+
 
 #---------------------
 # cockroachdb settings
@@ -164,14 +165,14 @@ cassandra:
 elasticsearch:
   config_master_node:
     es_version: "7.10.2" # instana required.
-    es_heap_size: "3g"  # instana required.
+    es_heap_size: "4g"  # instana required.
     es_data_dirs: # instana required.
       - "/mnt/data/elasticsearch/data"
     es_log_dir: "/mnt/logs/elasticsearch" # instana required.
     es_config:
       cluster.name: "test-cluster" # instana required.
-      cluster.initial_master_nodes: "cinst-k1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
-      discovery.seed_hosts: "cinst-k1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
+      cluster.initial_master_nodes: "tdata-d1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
+      discovery.seed_hosts: "tdata-d1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
       http.host: 0.0.0.0
       http.port: 9200
       node.data: false
@@ -183,14 +184,14 @@ elasticsearch:
      - plugin: ingest-attachment
   config_data_node:
     es_version: "7.10.2" # instana required.
-    es_heap_size: "2g"  # instana required.
+    es_heap_size: "4g"  # instana required.
     es_data_dirs: # instana required.
       - "/mnt/data/elasticsearch/data"
     es_log_dir: "/mnt/logs/elasticsearch"
     es_config:
       cluster.name: "test-cluster" # instana required.
-      cluster.initial_master_nodes: "cinst-k1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
-      discovery.seed_hosts: "cinst-k1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
+      cluster.initial_master_nodes: "tdata-d1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
+      discovery.seed_hosts: "tdata-d1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
       http.host: 0.0.0.0
       http.port: 9200
       node.data: true

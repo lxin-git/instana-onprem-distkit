@@ -20,6 +20,19 @@
     owner: kafka
     group: kafka
 
+
+- name: set fact for zookeeper_join_list
+  set_fact:
+    zookeeper_join_list: |-
+      {%- set list = [] -%}
+      {% for host in groups["zookeeper_node"] -%}
+        {% set join_ip = hostvars[host].ip -%}
+        {% set join_port = zookeeper_client_port -%}
+        {% set ip_port = join_ip ~ ':' ~ join_port -%}
+        {{ list.append(ip_port) }}
+      {%- endfor -%}
+      {{ list }}
+
 - name: create kafka config file
   template:
     src: server.properties.j2
