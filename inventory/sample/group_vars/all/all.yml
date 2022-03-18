@@ -12,9 +12,9 @@ instana_java_home: /opt/instana/jre11
 zookeeper_client_port: 2181  # {{ zookeeper.configuration.client_port }} ,pick this var out here as it will be used for zookeeper, kafka, clickhouse
 
 # For network limitation, you may need a proxy setting, uncomment following setting if required.
-# http_proxy=http://<your_proxy>
-# https_proxy=http://<your_proxy>
-# no_proxy=cn.ibm.com
+# http_proxy: http://<your_proxy>
+# https_proxy: http://<your_proxy>
+# no_proxy: cn.ibm.com
 
 #-------------------
 # zookeeper settings
