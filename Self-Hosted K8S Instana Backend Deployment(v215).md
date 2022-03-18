@@ -147,11 +147,11 @@ check the instruction here about ansible automation for  [Automatic Deploy Insta
 ## Instana Core & Unit setup in cstan (v215)
 
 ### Miscellaneous
-To check with aval package: https://self-hosted.instana.io/
-RPM packages location: https://self-hosted.instana.io/rpm/release/product/rpm/generic/x86_64/Packages
-Download URL example for specific version of kubectl plugin & instana console:
-https://self-hosted.instana.io/rpm/release/product/rpm/generic/x86_64/Packages/instana-console-215-1.x86_64.rpm
-https://self-hosted.instana.io/rpm/release/product/rpm/generic/x86_64/Packages/instana-kubectl-215-5.x86_64.rpm
+To check with aval package: https://self-hosted.instana.io/   
+RPM packages location: https://self-hosted.instana.io/rpm/release/product/rpm/generic/x86_64/Packages   
+Download URL example for specific version of kubectl plugin & instana console:   
+https://self-hosted.instana.io/rpm/release/product/rpm/generic/x86_64/Packages/instana-console-215-1.x86_64.rpm   
+https://self-hosted.instana.io/rpm/release/product/rpm/generic/x86_64/Packages/instana-kubectl-215-5.x86_64.rpm   
 
 ### Preparation
 
@@ -340,59 +340,6 @@ kubectl apply -f ${DEPLOY_LOCAL_WORKDIR}/out/crs/
 > check and wait for everything in instana-core namespace ready: `kubectl get po -n instana-core`
 > check and wait for tu-instana-prod-ui-backend deployment ready: `kubectl get deploy tu-instana-prod-ui-backend -n instana-units`
 
-
-- use nginx ingress controller to expose gateway & acceptor
-
-
-Edit ingress-nginx daemonset, add args `--enable-ssl-passthrough`
-```
-    spec:
-      containers:
-      - args:
-        - /nginx-ingress-controller
-        - --configmap=$(POD_NAMESPACE)/ingress-nginx
-        - --tcp-services-configmap=$(POD_NAMESPACE)/tcp-services
-        - --udp-services-configmap=$(POD_NAMESPACE)/udp-services
-        - --annotations-prefix=nginx.ingress.kubernetes.io
-        - --watch-ingress-without-class=true
-        - --report-node-internal-ip-address
-        - --enable-ssl-passthrough
-```
-> To expose Instana UI service, we need enable ssl passthrough for ingress contoller, this was disabled by default during ingress controller deployment.
-
-create ingress:
-```
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: instata-core-ingress-https
-  namespace: instana-core
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/ssl-passthrough: "true"    
-spec:
-  rules:
-    - host: "cstan-k1.fyre.ibm.com"
-      http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: gateway
-              port:
-                number: 8443
-    - host: "prod-instana.cstan-k1.fyre.ibm.com"
-      http:
-        paths:
-        - path: /
-          pathType: Prefix
-          backend:
-            service:
-              name: gateway
-              port:
-                number: 8443
-```
 
 ### Configure nginx ingress controller to expose gateway and acceptor
 
