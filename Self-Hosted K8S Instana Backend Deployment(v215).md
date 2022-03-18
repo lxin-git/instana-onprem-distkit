@@ -138,7 +138,7 @@ ansible-playbook -i inventory/sample/inventory.ini \
 
 ## Instana DB Server Setup
 
-check the instruction here about ansible automation for (Automatic Deploy Instana Distributed Data Store Components)
+check the instruction here about ansible automation for  [Automatic Deploy Instana Distributed Data Store Components](./README.md).
 
 
 ## Instana Core & Unit setup in cstan (v215)
