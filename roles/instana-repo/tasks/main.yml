@@ -27,4 +27,3 @@
 # which it stores under /var/cache/yum/repos/. https://github.com/ansible/ansible/issues/20711
 - name: Make cache to FORCE gpg key imported.
   command: "yum makecache -y fast"
-  when: import_instana_gpg.changed
