@@ -12,7 +12,7 @@
 		- [Miscellaneous](#miscellaneous)
 		- [Preparation](#preparation)
 		- [setup instana core/unit](#setup-instana-coreunit)
-		- [Configure nginx ingress controller to expose gateway & acceptor](#configure-nginx-ingress-controller-to-expose-gateway-acceptor)
+		- [Configure nginx ingress controller to expose gateway and acceptor](#configure-nginx-ingress-controller-to-expose-gateway-and-acceptor)
 	- [ArgoCD setup](#argocd-setup)
 
 <!-- /TOC -->
@@ -391,7 +391,7 @@ spec:
                 number: 8443
 ```
 
-### Configure nginx ingress controller to expose gateway & acceptor
+### Configure nginx ingress controller to expose gateway and acceptor
 
 - Edit ingress-nginx daemonset`kubectl edit ds ingress-nginx-controller -n ingress-nginx` , add args `--enable-ssl-passthrough`
 ```
