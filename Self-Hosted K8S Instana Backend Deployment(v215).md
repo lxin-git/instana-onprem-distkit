@@ -423,6 +423,13 @@ EOF
 ```
 kubectl apply -f ${DEPLOY_LOCAL_WORKDIR}/nodeport.yaml
 ```
+- Access backend UI
+
+make sure your dns service can resolve fqdn `${INSTANA_FQDN}` and `prod-instana.${INSTANA_FQDN}` to any of your cluster node ip
+> In this example, you can use any of these 3 ip: 9.112.252.140, 9.112.252.164, 9.112.252.178
+
+https://${INSTANA_FQDN}   
+admin@instana.local/passw0rd   
 
 
 ## ArgoCD setup
