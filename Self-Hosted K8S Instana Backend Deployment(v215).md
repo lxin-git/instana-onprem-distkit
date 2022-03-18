@@ -89,6 +89,9 @@ image_command_tool: crictl
 containerd_registry_auth:
   - registry: registry-1.docker.io
     auth: "bGxpeGlubjpYaW4xQHhpbmw="
+upstream_dns_servers:
+  - 9.0.146.50
+  - 8.8.8.8   		
 http_proxy: "http://xcoc-proxy.fyre.ibm.com:3128"
 https_proxy: "http://xcoc-proxy.fyre.ibm.com:3128"
 EOF
@@ -463,9 +466,10 @@ spec:
       nodePort: 30950
       protocol: TCP
   selector:
-    application: instana
-    component: acceptor
-    group: service
+	  app.kubernetes.io/component: acceptor
+	  app.kubernetes.io/name: instana
+	  app.kubernetes.io/part-of: core
+	  instana.io/group: service
   type: NodePort
 EOF
 ```
