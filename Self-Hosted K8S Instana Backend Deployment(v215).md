@@ -4,16 +4,16 @@
 <!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
 - [v215 cstan/cdata deployment](#v215-cstancdata-deployment)
-	- [Environment](#environment)
-	- [Kubenertes Cluster Deployment via kubespray](#kubenertes-cluster-deployment-via-kubespray)
-		- [Example to rerun playbook to change settings for ingress add-on](#example-to-rerun-playbook-to-change-settings-for-ingress-add-on)
-	- [Instana DB Server Setup](#instana-db-server-setup)
-	- [Instana Core & Unit setup in cstan (v215)](#instana-core-unit-setup-in-cstan-v215)
-		- [Miscellaneous](#miscellaneous)
-		- [Preparation](#preparation)
-		- [setup instana core/unit](#setup-instana-coreunit)
-		- [Configure nginx ingress controller to expose gateway and acceptor](#configure-nginx-ingress-controller-to-expose-gateway-and-acceptor)
-	- [ArgoCD setup](#argocd-setup)
+  - [Environment](#environment)
+  - [Kubenertes Cluster Deployment via kubespray](#kubenertes-cluster-deployment-via-kubespray)
+    - [Example to rerun playbook to change settings for ingress add-on](#example-to-rerun-playbook-to-change-settings-for-ingress-add-on)
+  - [Instana DB Server Setup](#instana-db-server-setup)
+  - [Instana Core & Unit setup in cstan (v215)](#instana-core--unit-setup-in-cstan-v215)
+    - [Miscellaneous](#miscellaneous)
+    - [Preparation](#preparation)
+    - [setup instana core/unit](#setup-instana-coreunit)
+    - [Configure nginx ingress controller to expose gateway and acceptor](#configure-nginx-ingress-controller-to-expose-gateway-and-acceptor)
+  - [ArgoCD setup](#argocd-setup)
 
 <!-- /TOC -->
 
@@ -117,7 +117,7 @@ docker run --rm -it \
            --env HTTP_PROXY="http://xcoc-proxy.fyre.ibm.com:3128" \
            --env HTTPS_PROXY="http://xcoc-proxy.fyre.ibm.com:3128" \
            quay.io/kubespray/kubespray:v2.18.0 bash
- ```          
+```          
 
 - Kick-off the playbook INSIDE container for cluster deployment
 ```           
