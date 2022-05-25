@@ -1,0 +1,6 @@
+---
+- name: Stop Clickhouse
+  systemd:
+    name: clickhouse-server
+    enabled: yes
+    state: stopped

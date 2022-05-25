@@ -43,6 +43,13 @@
     group: cassandra
   notify: Update Cassandra
 
+- name: Configure the cassandra log file setting
+  lineinfile:
+    path: /etc/rc.d/init.d/cassandra
+    regexp: '^log_file\='
+    line: "log_file={{ cassandra.configuration.log_dir }}/cassandra.log"
+  notify: Update Cassandra
+
 - name: Replace ThreadPriorityPolicy setting in jvmoptions # fix jre11 issue for instana
   lineinfile:
     path: /etc/cassandra/conf/jvm.options

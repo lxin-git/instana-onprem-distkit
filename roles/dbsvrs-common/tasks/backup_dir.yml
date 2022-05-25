@@ -1,0 +1,30 @@
+# This playbook is meant to be used with an include and a loop
+# If you don't have both of these, do not use it
+# It helps create backup for given directory
+# /path/to/foo will be backup to /path/to/backup-<current_run_timestamp>/foo
+
+- name: Set the backup datetime variable
+  set_fact:
+    backup_date: "{{ hostvars['localhost']['current_run_timestamp']['stdout'] }}"
+
+- name: Create backup dir {{ item }}/../backup_{{ backup_date }}
+  file:
+    path: "{{ item }}/../backup_{{ backup_date }}"
+    state: directory
+    mode: '0755'
+
+- name: Get stats of the FS object
+  stat:
+    path: "{{ item }}"
+  register: stnow
+
+#- debug: var=stnow
+
+- name: Copy {{ item }} to {{ item }}/../backup_{{ backup_date }}
+  copy:
+    remote_src: yes
+    src: "{{ item }}"
+    dest: "{{ item }}/../backup_{{ backup_date }}"
+    owner: "{{ stnow.stat.pw_name }}"
+    group: "{{ stnow.stat.gr_name }}"
+    mode: preserve

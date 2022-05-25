@@ -3,3 +3,7 @@
     tags: [zookeeper, zookeeper_install, install]
   - import_tasks: config.yml
     tags: [zookeeper, zookeeper_config, config]
+  - import_tasks: stop.yml
+    tags: [never, zookeeper, zookeeper_stop, stop]
+  - import_tasks: clean.yml
+    tags: [never, zookeeper, zookeeper_clean, clean] 

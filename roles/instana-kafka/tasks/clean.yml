@@ -1,0 +1,13 @@
+---
+- name: Backup existing kafka data directories
+  include: ../../dbsvrs-common/tasks/backup_dir.yml
+  loop: 
+    - "{{ kafka.configuration.data_dir }}"
+    - "{{ kafka.configuration.log_dir }}"
+  when: skip_databackup|default(False) == False
+
+- name: Clean the kafka data directories
+  include: ../../dbsvrs-common/tasks/clean_dir.yml
+  loop: 
+    - "{{ kafka.configuration.data_dir }}"
+    - "{{ kafka.configuration.log_dir }}"

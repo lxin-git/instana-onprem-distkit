@@ -1,0 +1,30 @@
+---
+- name: Backup existing elasticsearch data directories - master node
+  include: ../../dbsvrs-common/tasks/backup_dir.yml
+  loop: "{{ elasticsearch.config_master_node.es_data_dirs + ['{{ elasticsearch.config_master_node.es_log_dir }}'] }}"
+  #  - "{{ elasticsearch.config_master_node.es_data_dirs[0] }}"
+  #  - "{{ elasticsearch.config_master_node.es_log_dir[0] }}"
+
+
+  when: es_role == 'master' and skip_databackup|default(False) == False 
+
+- name: Clean the elasticsearch data directories - master node
+  include: ../../dbsvrs-common/tasks/clean_dir.yml
+  loop: "{{ elasticsearch.config_master_node.es_data_dirs + ['{{ elasticsearch.config_master_node.es_log_dir }}'] }}"
+  #  - "{{ elasticsearch.config_master_node.es_data_dirs[0] }}"
+  #  - "{{ elasticsearch.config_master_node.es_log_dir[0] }}"
+  when: es_role == 'master'
+
+- name: Backup existing elasticsearch data directories - data node
+  include: ../../dbsvrs-common/tasks/backup_dir.yml
+  loop: "{{ elasticsearch.config_data_node.es_data_dirs + ['{{ elasticsearch.config_data_node.es_log_dir }}'] }}"
+  #  - "{{ elasticsearch.config_data_node.es_data_dirs[0] }}"
+  #  - "{{ elasticsearch.config_data_node.es_log_dir[0] }}"
+  when: es_role == 'data' and skip_databackup|default(False) == False 
+
+- name: Clean the elasticsearch data directories - data node
+  include: ../../dbsvrs-common/tasks/clean_dir.yml
+  loop: "{{ elasticsearch.config_data_node.es_data_dirs + ['{{ elasticsearch.config_data_node.es_log_dir }}'] }}"
+  #  - "{{ elasticsearch.config_data_node.es_data_dirs[0] }}"
+  #  - "{{ elasticsearch.config_data_node.es_log_dir[0] }}"
+  when: es_role == 'data'

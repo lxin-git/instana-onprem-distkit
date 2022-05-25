@@ -88,7 +88,7 @@ kube_version: v1.21.10
 image_command_tool: crictl
 containerd_registry_auth:
   - registry: registry-1.docker.io
-    auth: "bGxpeGlubjpYaW4xQHhpbmw="
+    auth: "<your docker.io creds (b64 encoded string for username:passwd)>"
 upstream_dns_servers:
   - 9.0.146.50
   - 8.8.8.8   		

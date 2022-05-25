@@ -1,0 +1,13 @@
+---
+- name: Backup existing zookeeper data directories
+  include: ../../dbsvrs-common/tasks/backup_dir.yml
+  loop: 
+    - "{{ zookeeper.configuration.data_dir }}"
+    - "{{ zookeeper.configuration.log_dir }}"
+  when: skip_databackup|default(False) == False
+
+- name: Clean the zookeeper data directories
+  include: ../../dbsvrs-common/tasks/clean_dir.yml
+  loop: 
+    - "{{ zookeeper.configuration.data_dir }}"
+    - "{{ zookeeper.configuration.log_dir }}"

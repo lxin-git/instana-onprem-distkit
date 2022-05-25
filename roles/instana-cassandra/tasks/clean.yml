@@ -1,0 +1,13 @@
+---
+- name: Backup existing cassandra data directories
+  include: ../../dbsvrs-common/tasks/backup_dir.yml
+  loop: 
+    - "{{ cassandra.configuration.data_dir }}"
+    - "{{ cassandra.configuration.log_dir }}"
+  when: skip_databackup|default(False) == False
+
+- name: Clean the cassandra data directories
+  include: ../../dbsvrs-common/tasks/clean_dir.yml
+  loop: 
+    - "{{ cassandra.configuration.data_dir }}"
+    - "{{ cassandra.configuration.log_dir }}"

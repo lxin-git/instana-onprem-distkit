@@ -1,0 +1,6 @@
+---
+- name: Stop Zookeeper
+  systemd:
+    name: zookeeper
+    enabled: yes
+    state: stopped

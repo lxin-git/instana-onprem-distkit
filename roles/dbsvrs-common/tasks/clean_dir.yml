@@ -1,0 +1,21 @@
+# This playbook is meant to be used with an include and a loop
+# If you don't have both of these, do not use it
+# It helps clean all the content for given directory
+
+- name: Get directory stats - {{ item }}
+  stat:
+    path: "{{ item }}"
+  register: stnow
+
+- name: Delete directory - {{ item }}
+  file:
+    path: "{{ item }}"
+    state: absent
+
+- name: Rereate directory - {{ item }}
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ stnow.stat.pw_name }}"
+    group: "{{ stnow.stat.gr_name }}"
+    mode: "{{ stnow.stat.mode }}"

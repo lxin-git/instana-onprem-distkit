@@ -68,3 +68,10 @@
       tags: [remove]
   tags: [remove]
   when: clickhouse_remove|bool
+
+- import_tasks: stop.yml
+  tags: [never, clickhouse, clickhouse_stop, stop]
+
+- import_tasks: clean.yml
+  tags: [never, clickhouse, clickhouse_clean, clean]
+  

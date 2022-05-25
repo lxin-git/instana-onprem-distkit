@@ -1,0 +1,39 @@
+---
+
+- hosts: localhost
+  gather_facts: False
+  tasks:
+    - shell: 'date +%Y%m%d%H%M%S'
+      register: current_run_timestamp
+      tags:
+      - always
+
+- hosts: cassandra_node
+  gather_facts: True
+  roles:
+    - { role: instana-cassandra }
+
+- hosts: clickhouse_node
+  gather_facts: True
+  roles:
+    - { role: instana-clickhouse }
+
+- hosts: cockroachdb_node
+  gather_facts: True
+  roles:
+    - { role: instana-cockroachdb }
+
+- hosts: elasticsearch_node
+  gather_facts: True
+  roles:
+    - { role: instana-elasticsearch }
+
+- hosts: kafka_node
+  gather_facts: True
+  roles:
+    - { role: instana-kafka }
+
+- hosts: zookeeper_node
+  gather_facts: True
+  roles:
+    - { role: instana-zookeeper }

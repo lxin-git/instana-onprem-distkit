@@ -1,7 +1,7 @@
 ## All in One setup for every Instana datastore component
 
 # Instana Agent Key
-instana_agent_key: qUMhYJxjSv6uZh2SyqTEnw
+instana_agent_key: <Your Agent Key>
 instana_repo_enabled: yes
 package_download_path : "/opt/images/"
 
@@ -12,10 +12,9 @@ instana_java_home: /opt/instana/jre11
 zookeeper_client_port: 2181  # {{ zookeeper.configuration.client_port }} ,pick this var out here as it will be used for zookeeper, kafka, clickhouse
 
 # For network limitation, you may need a proxy setting, uncomment following setting if required.
-http_proxy: http://xcoc-proxy.fyre.ibm.com:3128
-https_proxy: http://xcoc-proxy.fyre.ibm.com:3128
-no_proxy: cn.ibm.com
-
+# http_proxy: http://<your_proxy>
+# https_proxy: http://<your_proxy>
+# no_proxy: cn.ibm.com
 
 #-------------------
 # zookeeper settings
@@ -31,7 +30,7 @@ zookeeper:
     client_port: 2181
     data_dir: /mnt/data/zookeeper # instana required.
     conf_dir: /etc/zookeeper
-    log_dir: /mnt/data/logs/zookeeper
+    log_dir: /var/log/zookeeper
     log_file: zookeeper.log
     log_level: INFO
     log_max_file_size: 265MB
@@ -50,7 +49,7 @@ zookeeper:
 #----------------
 kafka:
   java_home: "{{ instana_java_home }}"
-  version: 2.7.2 # instana required.
+  version: 2.7.1 # instana required.
   scala_version: 2.13 # instana required.
   install_dir: /opt/kafka
   #download_mirror: http://apache.rediris.es/kafka
@@ -59,7 +58,7 @@ kafka:
     port: 9092
     conf_dir: /etc/kafka
     data_dir: /mnt/data/kafka # instana required.
-    log_dir: /mnt/data/logs/kafka
+    log_dir: /var/log/kafka
     delete_topic_enable: true
     replication_factor: 1
     network_threads: 3
@@ -84,7 +83,7 @@ clickhouse:
   # For server.xml.j2
   version: 21.3.8.76 # instana required.
   data_dir: /mnt/traces/clickhouse # instana required.
-  log_dir: "/mnt/data/logs/clickhouse-server"
+  log_dir: "/var/log/clickhouse-server"
   logger_level: information
   logger_size: 200M
   logger_count: 10
@@ -107,15 +106,15 @@ clickhouse:
   cluster_name: local # instana required.
   shards:
     0:
-      - { host: "bstore-1.fyre.ibm.com", port: 9000 }
-      - { host: "bstore-2.fyre.ibm.com", port: 9000 }
+      - { host: "tdata-d1.fyre.ibm.com", port: 9000 }
+      - { host: "tdata-d2.fyre.ibm.com", port: 9000 }
     #1:
-    #  - { host: "bstore-3.fyre.ibm.com", port: 9000 }
-    #  - { host: "bstore-4.fyre.ibm.com", port: 9000 }
+    #  - { host: "tdata-d3.fyre.ibm.com", port: 9000 }
+    #  - { host: "tdata-d4.fyre.ibm.com", port: 9000 }
   zknodes:
-    - { host: "9.123.116.158", port: 2181 }
-    - { host: "9.123.116.166", port: 2181 }
-    - { host: "9.123.116.168", port: 2181 }
+    - { host: "9.112.253.42", port: 2181 }
+    - { host: "9.112.253.60", port: 2181 }
+    - { host: "9.112.253.94", port: 2181 }
 
 
 #---------------------
@@ -133,7 +132,7 @@ cockroachdb:
     port: 26257
     http_port: 8001  # make sure not occupied as k8s nginx ingress will use 8081
     data_dir: /mnt/data/cockroachdb # instana required.
-    log_dir: /mnt/data/logs/cockroachdb
+    log_dir: /var/log/cockroachdb
     certs_dir: /mnt/data/cockroachdb/certs # instana required.
     cache: 512MiB # instana required.
     max_sql_memory: 512MiB # instana required.
@@ -151,8 +150,8 @@ cassandra:
   cluster_name: "onprem" # instana required.
   configuration:
     conf_dir: /etc/cassandra
-    data_dir: /mnt/metrics/cassandra # instana required. 
-    log_dir: /mnt/data/logs/cassandra
+    data_dir: /mnt/metrics/cassandra # instana required.
+    log_dir: /var/log/cassandra
     max_heap_size: 16G # instana required.
     heap_newsize: 4G # instana required.
     fd_limit: 1048576
@@ -165,15 +164,15 @@ cassandra:
 # Especially check the node.master & node.data vars, to be match hostvars[es_role] defined in the inventory file
 elasticsearch:
   config_master_node:
-    es_version: "7.16.3" # instana required.
+    es_version: "7.10.2" # instana required.
     es_heap_size: "4g"  # instana required.
     es_data_dirs: # instana required.
-      - "/mnt/data/elasticsearch"
-    es_log_dir: "/mnt/data/logs/elasticsearch" # instana required.
+      - "/mnt/data/elasticsearch/data"
+    es_log_dir: "/mnt/logs/elasticsearch" # instana required.
     es_config:
       cluster.name: "test-cluster" # instana required.
-      cluster.initial_master_nodes: "bstore-1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
-      discovery.seed_hosts: "bstore-1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
+      cluster.initial_master_nodes: "tdata-d1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
+      discovery.seed_hosts: "tdata-d1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
       http.host: 0.0.0.0
       http.port: 9200
       node.data: false
@@ -184,15 +183,15 @@ elasticsearch:
     es_plugins:
      - plugin: ingest-attachment
   config_data_node:
-    es_version: "7.16.3" # instana required.
+    es_version: "7.10.2" # instana required.
     es_heap_size: "4g"  # instana required.
     es_data_dirs: # instana required.
-      - "/mnt/data/elasticsearch"
-    es_log_dir: "/mnt/data/logs/elasticsearch"
+      - "/mnt/data/elasticsearch/data"
+    es_log_dir: "/mnt/logs/elasticsearch"
     es_config:
       cluster.name: "test-cluster" # instana required.
-      cluster.initial_master_nodes: "bstore-1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
-      discovery.seed_hosts: "bstore-1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
+      cluster.initial_master_nodes: "tdata-d1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
+      discovery.seed_hosts: "tdata-d1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
       http.host: 0.0.0.0
       http.port: 9200
       node.data: true

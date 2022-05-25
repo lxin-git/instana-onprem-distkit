@@ -3,3 +3,7 @@
     tags: [cockroachdb, cockroachdb_install, install]
   - import_tasks: config.yml
     tags: [cockroachdb, cockroachdb_config, config]
+  - import_tasks: stop.yml
+    tags: [never, cockroachdb, cockroachdb_stop, stop]
+  - import_tasks: clean.yml
+    tags: [never, cockroachdb, cockroachdb_clean, clean] 

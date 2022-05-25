@@ -119,3 +119,9 @@
   when: es_templates | bool
   tags:
       - templates
+
+- import_tasks: stop.yml
+  tags: [never, elasticsearch, elasticsearch_stop, stop]
+
+- import_tasks: clean.yml
+  tags: [never, elasticsearch, elasticsearch_clean, clean] 

@@ -1,0 +1,6 @@
+---
+- name: Stop Cassandra
+  systemd:
+    name: cassandra
+    enabled: yes
+    state: stopped

@@ -1,0 +1,6 @@
+---
+- name: Stop Cockroachdb
+  systemd:
+    name: cockroachdb
+    enabled: yes
+    state: stopped

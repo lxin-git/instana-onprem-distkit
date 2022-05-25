@@ -3,3 +3,7 @@
     tags: [kafka, kafka_install, install]
   - import_tasks: config.yml
     tags: [kafka, kafka_config, config]
+  - import_tasks: stop.yml
+    tags: [never, kafka, kafka_stop, stop]
+  - import_tasks: clean.yml
+    tags: [never, kafka, kafka_clean, clean] 

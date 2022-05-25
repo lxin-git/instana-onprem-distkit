@@ -1,0 +1,6 @@
+---
+- name: Stop Elasticsearch
+  systemd:
+    name: elasticsearch
+    enabled: yes
+    state: stopped

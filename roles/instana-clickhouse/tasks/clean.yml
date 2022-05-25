@@ -1,0 +1,13 @@
+---
+- name: Backup existing clickhouse data directories
+  include: ../../dbsvrs-common/tasks/backup_dir.yml
+  loop: 
+    - "{{ clickhouse.data_dir }}"
+    - "{{ clickhouse.log_dir }}"
+  when: skip_databackup|default(False) == False
+
+- name: Clean the clickhouse data directories
+  include: ../../dbsvrs-common/tasks/clean_dir.yml
+  loop: 
+    - "{{ clickhouse.data_dir }}"
+    - "{{ clickhouse.log_dir }}"

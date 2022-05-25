@@ -28,7 +28,16 @@
 #    - debug:
 #        msg: "{{ groups['zookeeper_node'] | list }}.cinst-k2.fyre.ibm.com|int)"
 
-- hosts: kafka_node
+
+- hosts: localhost
+  gather_facts: False
+  tasks:
+    - shell: 'date +%Y%m%d%H%M%S'
+      register: current_run_timestamp
+      tags:
+      - always
+
+- hosts: cassandra_node
   gather_facts: True
   roles:
-     - { role: instana-kafka }
+    - { role: instana-cassandra }

@@ -3,3 +3,7 @@
     tags: [cassandra, cassandra_install, install]
   - import_tasks: config.yml
     tags: [cassandra, cassandra_config, config]
+  - import_tasks: stop.yml
+    tags: [never, cassandra, cassandra_stop, stop]
+  - import_tasks: clean.yml
+    tags: [never, cassandra, cassandra_clean, clean]
