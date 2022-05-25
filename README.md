@@ -2,19 +2,18 @@
 This is the deployment instruction for Self-Hosted K8S Instana Backend, which include the automation for VM based datastore components required by Instana Backend.
 We will take the Instana V221 as an example, Instana operator start to support `v1beta2` CR in this version, and `v1beta1` will be deprecated from V225, so we will use `v1beta2` in this turorial.
 
-  - [Environment](#environment)
-  - [Kubenertes Cluster Deployment via kubespray](#kubenertes-cluster-deployment-via-kubespray)
 
-  - [Instana DB Server Setup](#instana-db-server-setup)
-  - [Instana Core & Unit setup in bstan (v221)](#instana-core--unit-setup-in-bstan-v221)
+  - [Environment](#environment)
+  - [Kubernetes Cluster Deployment via kubespray](#kubernetes-cluster-deployment-via-kubespray)
+  - [Distributed Datastores Deployment via Playbooks](#distributed-datastores-deployment-via-playbooks)
+  - [Instana Core & Unit Setup (v221)](#instana-core--unit-setup-v221)
     - [Miscellaneous](#miscellaneous)
     - [Preparation](#preparation)
     - [Deploy Instana Operator](#deploy-instana-operator)
     - [Deploy Instana Core & Unit](#deploy-instana-core--unit)
     - [Configure ingress to expose gateway & acceptor](#configure-ingress-to-expose-gateway--acceptor)
-    - [Configure nginx ingress controller to expose gateway & acceptor](#configure-nginx-ingress-controller-to-expose-gateway--acceptor)
-  - [ArgoCD setup](#argocd-setup)
-    - [doc issues:](#doc-issues)
+    - [Access backend UI](#access-backend-ui)
+  - [Known Limitation](#known-limitation)
 
 
 ## Environment
