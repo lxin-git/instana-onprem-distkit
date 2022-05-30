@@ -1,5 +1,5 @@
 ---
-elasticsearch_default:
+elasticsearch:
   config_master_node:
     es_version: "7.10.2" # instana required.
     es_heap_size: "3g"  # instana required.

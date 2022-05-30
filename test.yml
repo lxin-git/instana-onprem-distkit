@@ -1,5 +1,7 @@
 ---
 
+# Just for test & debug purpose, do NOT use this playbook
+
 #- hosts: dbsvrs
 #  gather_facts: False
 #  roles:
@@ -37,7 +39,28 @@
       tags:
       - always
 
-- hosts: cassandra_node
+- hosts: localhost
+  gather_facts: false
+  tasks:
+    - name: fact setting
+      set_fact:
+        es_dict: "{{ groups['elasticsearch_node'] | map('extract', hostvars)| selectattr('es_role','equalto', 'data') |list|json_query('[*].ip')|join(':9300,') }}:9300"
+        #es_dict: "{{ groups['elasticsearch_node'] | map('extract', hostvars, 'ip', 'es_role') | selectattr('es_role','equalto', 'master')|list }}"
+        #es_dict: "{{ groups['elasticsearch_node'] | map('extract', hostvars, 'es_role') |selectattr('es_role','equalto', 'master')| list }}"
+        #es_dict: "{{ groups['elasticsearch_node'] | map('extract', hostvars, ['ansible_default_ipv4', 'address']) | join(',') }}"
+    - debug: var=es_dict
+  
+- hosts: elasticsearch_node
   gather_facts: True
   roles:
-    - { role: instana-cassandra }
+    - { role: instana-elasticsearch }  
+  #tasks:
+  #  - name: Set master node configure facts
+  #    set_fact: 
+  #      es_version: "{{ elasticsearch.config_master_node.es_version | default(elasticsearch_default.config_master_node.es_version) }}"
+  #      es_heap_size: "{{ elasticsearch.config_master_node.es_heap_size | default(elasticsearch_default.config_master_node.es_heap_size) }}"
+  #      es_data_dirs: "{{ elasticsearch.config_master_node.es_data_dirs | default(elasticsearch_default.config_master_node.es_data_dirs) }}"
+  #      es_log_dir: "{{ elasticsearch.config_master_node.es_log_dir | default(elasticsearch_default.config_master_node.es_log_dir) }}"
+  #      es_config: "{{ elasticsearch_default.config_master_node.es_config | combine(elasticsearch.config_master_node.es_config, recursive=True) }}"
+  #      es_plugins: "{{ elasticsearch.config_master_node.es_plugins | default(elasticsearch_default.config_master_node.es_plugins) }}"
+  #  - debug: var=es_version

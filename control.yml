@@ -1,12 +1,10 @@
 ---
-
 - hosts: localhost
   gather_facts: False
   tasks:
     - shell: 'date +%Y%m%d%H%M%S'
       register: current_run_timestamp
-      tags:
-      - always
+      tags: [always]
 
 - hosts: cassandra_node
   gather_facts: True
@@ -37,3 +35,12 @@
   gather_facts: True
   roles:
     - { role: instana-zookeeper }
+
+- hosts: dbsvrs
+  gather_facts: False
+  tasks:
+    - name: Show the status for all datastores
+      import_role:
+        name: dbsvrs-common
+        tasks_from: status_report
+      tags: [always]

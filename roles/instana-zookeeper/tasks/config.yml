@@ -36,7 +36,8 @@
     mode: '0644'
     owner: zookeeper
     group: zookeeper
-
+  notify: Restart ZooKeeper
+  
 #- name: Create JAAS config file
 #  template:
 #    src: jaas.cfg.j2

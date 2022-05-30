@@ -1,0 +1,4 @@
+---
+- debug: var=zookeeper.configuration.members
+
+- debug: var=zookeeper.configuration.member_id

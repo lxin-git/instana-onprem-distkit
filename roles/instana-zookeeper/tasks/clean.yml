@@ -11,3 +11,24 @@
   loop: 
     - "{{ zookeeper.configuration.data_dir }}"
     - "{{ zookeeper.configuration.log_dir }}"
+
+- name: convert zookeeper members to dict
+  set_fact:
+    zookeeper_member_dict: "{{ zookeeper_member_dict | default([]) + [{'key': index + 1, 'value': item}] }}"
+  with_items:
+    - "{{ zookeeper.configuration.members }}"
+  loop_control:
+    index_var: index
+  run_once: yes
+
+- name: set zooKeeper member index
+  set_fact:
+    zookeeper_member_index: "{{ zookeeper_member_dict | selectattr('value', 'equalto', zookeeper.configuration.member_id) | map(attribute='key') | first }}"
+
+- name: recreate myid file
+  copy:
+    dest: "{{ zookeeper.configuration.data_dir }}/myid"
+    content: "{{ zookeeper_member_index }}"
+    mode: '0644'
+    owner: zookeeper
+    group: zookeeper

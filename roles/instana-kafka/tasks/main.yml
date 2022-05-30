@@ -6,4 +6,6 @@
   - import_tasks: stop.yml
     tags: [never, kafka, kafka_stop, stop]
   - import_tasks: clean.yml
-    tags: [never, kafka, kafka_clean, clean] 
+    tags: [never, kafka, kafka_clean, clean]
+  - import_tasks: restart.yml
+    tags: [never, kafka, kafka_restart, restart] 

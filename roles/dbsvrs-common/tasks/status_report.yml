@@ -1,0 +1,19 @@
+---
+- name: Populate service facts
+  service_facts:
+- pause:
+    seconds: 0
+    prompt: |
+
+      ================== DB Status ==================
+      HOST                          ZK KA CH CO CA ES  {% for host in groups['dbsvrs'] %}      
+      {{ "%-30s"|format(host) }}{% for item in ['zookeeper','kafka','clickhouse-server','cockroachdb','cassandra','elasticsearch'] %}{% if ( hostvars[host]['services'][item + '.service'] is not defined ) %}-  {% else %}{% if hostvars[host]['services'][item + '.service'].state == 'running' %}✅ {% else %}⛔️ {% endif %}{% endif %}{% endfor %}
+      {% endfor %}
+
+      ===============================================
+
+
+
+
+
+

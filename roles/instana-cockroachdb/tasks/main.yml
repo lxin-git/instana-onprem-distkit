@@ -6,4 +6,6 @@
   - import_tasks: stop.yml
     tags: [never, cockroachdb, cockroachdb_stop, stop]
   - import_tasks: clean.yml
-    tags: [never, cockroachdb, cockroachdb_clean, clean] 
+    tags: [never, cockroachdb, cockroachdb_clean, clean]
+  - import_tasks: restart.yml
+    tags: [never, cockroachdb, cockroachdb_restart, restart] 

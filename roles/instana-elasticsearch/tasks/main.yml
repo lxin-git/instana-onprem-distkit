@@ -1,13 +1,30 @@
 ---
-
-- name: MASTER | load settings
-  include_vars: elasticsearch.config_master_node.yml
+- name: Set master node configure facts
+  set_fact: 
+    es_version: "{{ elasticsearch.config_master_node.es_version | default(elasticsearch_default.config_master_node.es_version) }}"
+    es_heap_size: "{{ elasticsearch.config_master_node.es_heap_size | default(elasticsearch_default.config_master_node.es_heap_size) }}"
+    es_data_dirs: "{{ elasticsearch.config_master_node.es_data_dirs | default(elasticsearch_default.config_master_node.es_data_dirs) }}"
+    es_log_dir: "{{ elasticsearch.config_master_node.es_log_dir | default(elasticsearch_default.config_master_node.es_log_dir) }}"
+    es_config: "{{ elasticsearch_default.config_master_node.es_config | combine(elasticsearch.config_master_node.es_config, recursive=True) }}"
+    es_plugins: "{{ elasticsearch.config_master_node.es_plugins | default(elasticsearch_default.config_master_node.es_plugins) }}"
+    es_api_host: "{{ elasticsearch.config_master_node.es_config.http.host | default(es_api_host) }}"
+    es_api_port: "{{ elasticsearch.config_master_node.es_config.http.port | default(es_api_port) }}"      
   when: es_role == 'master'
 
-- name: DATA | load settings
-  include_vars: elasticsearch.config_data_node.yml
+- name: Set data node configure facts
+  set_fact: 
+    es_version: "{{ elasticsearch.config_data_node.es_version | default(elasticsearch_default.config_data_node.es_version) }}"
+    es_heap_size: "{{ elasticsearch.config_data_node.es_heap_size | default(elasticsearch_default.config_data_node.es_heap_size) }}"
+    es_data_dirs: "{{ elasticsearch.config_data_node.es_data_dirs | default(elasticsearch_default.config_data_node.es_data_dirs) }}"
+    es_log_dir: "{{ elasticsearch.config_data_node.es_log_dir | default(elasticsearch_default.config_data_node.es_log_dir) }}"
+    es_config: "{{ elasticsearch_default.config_data_node.es_config | combine(elasticsearch.config_data_node.es_config, recursive=True) }}"
+    es_plugins: "{{ elasticsearch.config_data_node.es_plugins | default(elasticsearch_default.config_data_node.es_plugins) }}"
   when: es_role == 'data'
 
+- name: Set es_api facts
+  set_fact: 
+    es_api_host: "{{ es_config['http.host'] | default(es_api_host) }}"
+    es_api_port: "{{ es_config['http.port'] | default(es_api_port) }}" 
 
 - set_fact: "es_major_version={{ es_version.split('.')[0] }}.x"
   when:
@@ -124,4 +141,7 @@
   tags: [never, elasticsearch, elasticsearch_stop, stop]
 
 - import_tasks: clean.yml
-  tags: [never, elasticsearch, elasticsearch_clean, clean] 
+  tags: [never, elasticsearch, elasticsearch_clean, clean]
+
+- import_tasks: restart.yml
+  tags: [never, elasticsearch, elasticsearch_restart, restart] 

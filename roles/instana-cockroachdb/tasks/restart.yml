@@ -1,0 +1,6 @@
+---
+- name: Restart Cockroachdb
+  systemd:
+    name: cockroachdb
+    enabled: yes
+    state: restarted

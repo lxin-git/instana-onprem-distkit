@@ -6,4 +6,8 @@
   - import_tasks: stop.yml
     tags: [never, zookeeper, zookeeper_stop, stop]
   - import_tasks: clean.yml
-    tags: [never, zookeeper, zookeeper_clean, clean] 
+    tags: [never, zookeeper, zookeeper_clean, clean]
+  - import_tasks: restart.yml
+    tags: [never, zookeeper, zookeeper_restart, restart]
+  - import_tasks: debug.yml
+    tags: [never, debug] 

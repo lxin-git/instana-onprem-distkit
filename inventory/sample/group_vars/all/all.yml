@@ -1,7 +1,7 @@
 ## All in One setup for every Instana datastore component
 
 # Instana Agent Key
-instana_agent_key: qUMhYJxjSv6uZh2SyqTEnw
+instana_agent_key: <Your Agent Key>
 instana_repo_enabled: yes
 package_download_path : "/opt/images/"
 
@@ -12,8 +12,8 @@ instana_java_home: /opt/instana/jre11
 zookeeper_client_port: 2181  # {{ zookeeper.configuration.client_port }} ,pick this var out here as it will be used for zookeeper, kafka, clickhouse
 
 # For network limitation, you may need a proxy setting, uncomment following setting if required.
-http_proxy: http://xcoc-proxy.fyre.ibm.com:3128
-https_proxy: http://xcoc-proxy.fyre.ibm.com:3128
+http_proxy: http://<your_proxy>
+https_proxy: http://<your_proxy>
 no_proxy: cn.ibm.com
 
 
@@ -42,8 +42,10 @@ zookeeper:
     sync_limit: 5 # instana required.
     autopurge_snapretain_count: 20 # instana required.
     purge_interval: 1 # instana required.
-    members: "{{ groups['zookeeper_node'] | map('extract', hostvars, 'ansible_default_ipv4') | map(attribute='address') | list }}"
-    member_id: "{{ ansible_default_ipv4.address }}"
+    #members: "{{ groups['zookeeper_node'] | map('extract', hostvars, 'ansible_default_ipv4') | map(attribute='address') | list }}"
+    #member_id: "{{ ansible_default_ipv4.address }}"
+    members: "{{ groups['zookeeper_node'] | map('extract', hostvars, 'ip') | list }}"
+    member_id: "{{ ip }}"
 
 #----------------
 # kafka settings
@@ -75,8 +77,12 @@ kafka:
     log_retention_check_interval: 300000
     log_cleaner_enable: false
     zk_connection_timeout: 60000
-  members: "{{ groups['kafka_node'] | map('extract', hostvars, 'ansible_default_ipv4') | map(attribute='address') | list }}"
-  member_id: "{{ ansible_default_ipv4.address }}"
+  #members: "{{ groups['kafka_node'] | map('extract', hostvars, 'ansible_default_ipv4') | map(attribute='address') | list }}"
+  #member_id: "{{ ansible_default_ipv4.address }}"
+  members: "{{ groups['kafka_node'] | map('extract', hostvars, 'ip') | list }}"
+  member_id: "{{ ip }}"
+
+
 #--------------------
 # clickhouse settings
 #--------------------
@@ -113,10 +119,12 @@ clickhouse:
     #  - { host: "bstore-3.fyre.ibm.com", port: 9000 }
     #  - { host: "bstore-4.fyre.ibm.com", port: 9000 }
   zknodes:
-    - { host: "9.123.116.158", port: 2181 }
-    - { host: "9.123.116.166", port: 2181 }
-    - { host: "9.123.116.168", port: 2181 }
-
+    #- { host: "9.123.116.158", port: 2181 }
+    #- { host: "9.123.116.166", port: 2181 }
+    #- { host: "9.123.116.168", port: 2181 }
+    - { host: "10.61.6.38", port: 2181 }
+    - { host: "10.61.6.40", port: 2181 }
+    - { host: "10.61.6.42", port: 2181 }
 
 #---------------------
 # cockroachdb settings
@@ -172,13 +180,15 @@ elasticsearch:
     es_log_dir: "/mnt/data/logs/elasticsearch" # instana required.
     es_config:
       cluster.name: "test-cluster" # instana required.
-      cluster.initial_master_nodes: "bstore-1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
-      discovery.seed_hosts: "bstore-1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
-      http.host: 0.0.0.0
+      #cluster.initial_master_nodes: "cinst-k1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
+      #cluster.initial_master_nodes: "{{ groups['elasticsearch_node'] | map('extract', hostvars)| selectattr('es_role','equalto', 'master') |list|json_query('[*].ip')|join(',') }}"
+      #discovery.seed_hosts: "cinst-k1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
+      #discovery.seed_hosts: "{{ groups['elasticsearch_node'] | map('extract', hostvars)| selectattr('es_role','equalto', 'master') |list|json_query('[*].ip')|join(':9300,') }}:9300"
+      http.host: "{{ ip }}" # In general we set to 0.0.0.0, if you prefer use a privateip,try to use "{{ ip }}"
       http.port: 9200
       node.data: false
       node.master: true
-      transport.host: 0.0.0.0
+      transport.host: "{{ ip }}" # In general we set to 0.0.0.0, if you prefer use a privateip,try to use "{{ ip }}"
       transport.port: 9300
       bootstrap.memory_lock: true # instana required.
     es_plugins:
@@ -191,13 +201,15 @@ elasticsearch:
     es_log_dir: "/mnt/data/logs/elasticsearch"
     es_config:
       cluster.name: "test-cluster" # instana required.
-      cluster.initial_master_nodes: "bstore-1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
-      discovery.seed_hosts: "bstore-1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
-      http.host: 0.0.0.0
+      #cluster.initial_master_nodes: "cinst-k1.fyre.ibm.com" # <node.name>:<port>,<node.name>:<port> (typically the node names of the clusters dedicated masters)
+      #cluster.initial_master_nodes: "{{ groups['elasticsearch_node'] | map('extract', hostvars)| selectattr('es_role','equalto', 'master') |list|json_query('[*].ip')|join(',') }}"
+      #discovery.seed_hosts: "cinst-k1.fyre.ibm.com:9300" # <host>:<port>,<host>:<port> (typically the clusters dedicated masters)
+      #discovery.seed_hosts: "{{ groups['elasticsearch_node'] | map('extract', hostvars)| selectattr('es_role','equalto', 'master') |list|json_query('[*].ip')|join(':9300,') }}:9300"
+      http.host: "{{ ip }}" # In general we set to 0.0.0.0, if you prefer use a privateip,try to use "{{ ip }}"
       http.port: 9200
       node.data: true
       node.master: false
-      transport.host: 0.0.0.0
+      transport.host: "{{ ip }}" # In general we set to 0.0.0.0, if you prefer use a privateip,try to use "{{ ip }}"
       transport.port: 9300
       bootstrap.memory_lock: true # instana required
     es_plugins:

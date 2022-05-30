@@ -7,3 +7,5 @@
     tags: [never, cassandra, cassandra_stop, stop]
   - import_tasks: clean.yml
     tags: [never, cassandra, cassandra_clean, clean]
+  - import_tasks: restart.yml
+    tags: [never, cassandra, cassandra_restart, restart]

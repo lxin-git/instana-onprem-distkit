@@ -128,3 +128,19 @@ Good Luck !
   ```
   ansible-playbook -i inventory/sample/bstore.ini control.yml --tags clean
   ```
+
+- Get service status for all Datastores:
+  ```
+  ansible-playbook -i inventory/sample/bstore.ini control.yml --tags status
+  ```
+  You may get the sample output like below:
+  ```console
+  [dbsvrs-common : pause]
+
+  ================== DB Status ==================
+  HOST                          ZK KA CH CO CA ES
+  bstore-1.fyre.ibm.com         ✅ ✅ ✅ -  ✅ ✅
+  bstore-2.fyre.ibm.com         ✅ -  ✅ ✅ ✅ ✅
+  bstore-3.fyre.ibm.com         ✅ ✅ -  ✅ -  ✅
+  ===============================================
+  ```

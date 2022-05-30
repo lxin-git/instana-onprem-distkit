@@ -1,0 +1,6 @@
+---
+- name: Restart Kafka
+  systemd:
+    name: kafka
+    enabled: yes
+    state: restarted
