@@ -24,16 +24,16 @@
 - name: Install by YUM | Ensure clickhouse package installed (latest)
   dnf:
     name: "{{ clickhouse_package }} "
-    state: "{{ clickhouse_version }}"
+    state: "{{ clickhouse.version }}"
   become: true
   tags: [install]
-  when: clickhouse_version == 'latest'
+  when: clickhouse.version == 'latest'
 
-- name: Install by YUM | Ensure clickhouse package installed (version {{ clickhouse_version }})
+- name: Install by YUM | Ensure clickhouse package installed (version {{ clickhouse.version }})
   dnf:
-    name: "{{ clickhouse_package | map('regex_replace', '$', '-' + clickhouse_version) | list }}"
+    name: "{{ clickhouse_package | map('regex_replace', '$', '-' + clickhouse.version) | list }}"
     state: present
-    disable_gpg_check: "{{ true if clickhouse_version == '19.4.0' else omit }}" 
+    disable_gpg_check: "{{ true if clickhouse.version == '19.4.0' else omit }}" 
   become: true
   tags: [install]
-  when: clickhouse_version != 'latest'
+  when: clickhouse.version != 'latest'

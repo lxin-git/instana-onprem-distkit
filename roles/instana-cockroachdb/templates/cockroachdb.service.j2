@@ -8,8 +8,8 @@ RestartSec=30
 ExecStart={{ cockroachdb.install_dir }}/{{ cockroachdb.version }}/cockroach start \
   --store={{ cockroachdb.configuration.data_dir }} \
   --log-dir={{ cockroachdb.configuration.log_dir }} \
-  --listen-addr={{ ip }}:{{ cockroachdb.configuration.port }} \
-  --http-addr={{ ip }}:{{ cockroachdb.configuration.http_port }} \
+  --listen-addr={{ ansible_default_ipv4.address }}:{{ cockroachdb.configuration.port }} \
+  --http-addr={{ ansible_default_ipv4.address }}:{{ cockroachdb.configuration.http_port }} \
   --join={{ cockroachdb_join_list | join(",")}} \
   --pid-file={{ cockroachdb.install_dir }}/{{ cockroachdb.version }}/cockroach.pid \
 {% if cockroachdb.configuration.cache is defined %}  --cache={{ cockroachdb.configuration.cache | default(omit)}} \
@@ -21,7 +21,7 @@ ExecStart={{ cockroachdb.install_dir }}/{{ cockroachdb.version }}/cockroach star
 {% if cockroachdb.cluster_mode|lower == 'secure' %}  --certs-dir={{cockroachdb.configuration.certs_dir}}{%else%}  --insecure{%endif%}
 
 EnvironmentFile=-/etc/cockroachdb/systemd.env
-ExecStop={{ cockroachdb.install_dir }}/{{ cockroachdb.version }}/cockroach quit --host={{ ip }}:{{ cockroachdb.configuration.port }}{% if cockroachdb.cluster_mode|lower == 'secure' %} --certs-dir={{cockroachdb.configuration.certs_dir}}{%else%} --insecure{%endif%}
+ExecStop={{ cockroachdb.install_dir }}/{{ cockroachdb.version }}/cockroach quit --host={{ ansible_default_ipv4.address }}:{{ cockroachdb.configuration.port }}{% if cockroachdb.cluster_mode|lower == 'secure' %} --certs-dir={{cockroachdb.configuration.certs_dir}}{%else%} --insecure{%endif%}
 
 LimitCORE=infinity
 LimitNOFILE=500000

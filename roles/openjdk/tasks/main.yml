@@ -1,0 +1,9 @@
+---
+# tasks file for openjdk
+
+- name: Install OpenJDK {{ openjdk_package }}
+  yum:
+    name: "{{ openjdk_package }}"
+    state: present
+    update_cache: yes
+  become: true

@@ -82,7 +82,7 @@
     cockroachdb_join_list: |-
       {%- set list = [] -%}
       {% for host in groups["cockroachdb_node"] -%}
-        {% set join_ip = hostvars[host].ip -%}
+        {% set join_ip = hostvars[host].ansible_default_ipv4.address -%}
         {% set join_port = cockroachdb['configuration']['port'] -%}
         {% set ip_port = join_ip ~ ':' ~ join_port -%}
         {{ list.append(ip_port) }}

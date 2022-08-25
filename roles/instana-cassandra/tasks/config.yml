@@ -52,7 +52,7 @@
 
 - name: Replace ThreadPriorityPolicy setting in jvmoptions # fix jre11 issue for instana
   lineinfile:
-    path: /etc/cassandra/conf/jvm.options
+    path: /etc/cassandra/conf/jvm8-server.options
     regexp: '^\-XX\:ThreadPriorityPolicy\=42'
     line: -XX:ThreadPriorityPolicy=1
   notify: Update Cassandra

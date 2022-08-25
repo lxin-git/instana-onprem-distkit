@@ -26,18 +26,18 @@
 
 - name: Install by APT | Package installation
   apt:
-    name: "{{ clickhouse_package | map('regex_replace', '$', '=' + clickhouse_version) | list }}"
+    name: "{{ clickhouse_package | map('regex_replace', '$', '=' + clickhouse.version) | list }}"
     state: present
     update_cache: true
   become: true
-  when: clickhouse_version != 'latest'
+  when: clickhouse.version != 'latest'
   tags: [install]
 
 - name: Install by APT | Package installation
   apt:
     name: "{{ clickhouse_package }}"
-    state: "{{ clickhouse_version }}"
+    state: "{{ clickhouse.version }}"
     update_cache: true
   become: true
-  when: clickhouse_version == 'latest'
+  when: clickhouse.version == 'latest'
   tags: [install]

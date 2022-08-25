@@ -8,11 +8,13 @@
 
 - hosts: cassandra_node
   gather_facts: True
+  become: true
   roles:
     - { role: instana-cassandra }
 
 - hosts: clickhouse_node
   gather_facts: True
+  become: true
   roles:
     - { role: instana-clickhouse }
 
@@ -23,16 +25,19 @@
 
 - hosts: elasticsearch_node
   gather_facts: True
+  become: true
   roles:
     - { role: instana-elasticsearch }
 
 - hosts: kafka_node
+  become: true
   gather_facts: True
   roles:
     - { role: instana-kafka }
 
 - hosts: zookeeper_node
   gather_facts: True
+  become: true
   roles:
     - { role: instana-zookeeper }
 

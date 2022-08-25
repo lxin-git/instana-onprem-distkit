@@ -1,23 +1,23 @@
 ---
 
-- name: Importing GPG key for instana-distonprem
+- name: Importing GPG key for instana-product
   rpm_key:
     state: present
-    key: https://packages.instana.io/Instana.gpg
+    key: https://self-hosted.instana.io/signing_key.gpg
   become: true
-  environment: "{{ proxy_env }}"
+  # environment: "{{ proxy_env }}"
   register: import_instana_gpg
 
-- name: Enable Instana-DistOnPrem repo for RedHat/CentOS
+- name: Enable Instana-Product repo for RedHat/CentOS
   yum_repository:
-    file: Instana-DistOnPrem
-    name: instana-distonprem
-    description: Instana Distributed OnPrem Installation Package Repo
-    baseurl: https://_:{{ instana_agent_key }}@packages.instana.io/release/distonprem/rpm/generic/x86_64
+    file: Instana-Product
+    name: instana-product
+    description: Instana Product Installation Package Repo
+    baseurl: https://self-hosted.instana.io/rpm/release/product/rpm/generic/x86_64/Packages
     enabled: yes
     gpgcheck: yes
     repo_gpgcheck: yes
-    gpgkey: https://packages.instana.io/Instana.gpg
+    gpgkey: https://self-hosted.instana.io/signing_key.gpg
     priority: "5"
     sslverify: yes
     skip_if_unavailable: yes

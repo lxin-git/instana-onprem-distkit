@@ -62,12 +62,12 @@
   tags: [config, config_dict]
   when: not clickhouse_remove|bool
 
-- include_tasks:
-    file: remove.yml
-    apply:
-      tags: [remove]
-  tags: [remove]
-  when: clickhouse_remove|bool
+# - include_tasks:
+#     file: remove.yml
+#     apply:
+#       tags: [remove, clickhouse_remove]
+#   tags: [remove, clickhouse_remove]
+#   when: clickhouse_remove|bool
 
 - import_tasks: stop.yml
   tags: [never, clickhouse, clickhouse_stop, stop]

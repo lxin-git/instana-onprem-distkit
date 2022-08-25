@@ -5,10 +5,10 @@
     dest: "{{ item }}"
     state: absent
   loop:
-    - "{{ clickhouse.log_directory }}"
-    - "{{ clickhouse_path_configdir }}"
-    - "{{ clickhouse_path_tmp }}"
-    - "{{ clickhouse_path_data }}"
+    - "{{ clickhouse.log_dir }}"
+    - "{{ clickhouse.data_dir }}"
+    - "/etc/clickhouse-client/"
+    - "/etc/clickhouse-server/"
   become: true
   when: clickhouse_remove_full
 

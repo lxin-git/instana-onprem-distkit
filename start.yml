@@ -9,18 +9,23 @@
 
 - hosts: dbsvrs
   gather_facts: False
+  remote_user: centos
+  become: true
   roles:
     - { role: dbsvrs-common }
     - { role: instana-repo,  when: instana_repo_enabled }
-    - { role: instana-jre }
+    - { role: instana-jre, when: instana_repo_enabled  }
+    - { role: openjdk, when: not instana_repo_enabled  }
 
 - hosts: zookeeper_node
   gather_facts: True
+  become: true
   roles:
     - { role: instana-zookeeper }
 
 - hosts: kafka_node
   gather_facts: True
+  become: true
   roles:
     - { role: instana-kafka }
 
@@ -31,11 +36,13 @@
 
 - hosts: cockroachdb_node
   gather_facts: True
+  become: true
   roles:
     - { role: instana-cockroachdb }
 
 - hosts: cassandra_node
   gather_facts: True
+  become: true
   roles:
     - { role: instana-cassandra }
 

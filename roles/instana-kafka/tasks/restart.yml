@@ -1,5 +1,6 @@
 ---
 - name: Restart Kafka
+  become: true
   systemd:
     name: kafka
     enabled: yes

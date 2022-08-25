@@ -26,7 +26,7 @@
     zookeeper_join_list: |-
       {%- set list = [] -%}
       {% for host in groups["zookeeper_node"] -%}
-        {% set join_ip = hostvars[host].ip -%}
+        {% set join_ip = hostvars[host].ansible_default_ipv4.address -%}
         {% set join_port = zookeeper_client_port -%}
         {% set ip_port = join_ip ~ ':' ~ join_port -%}
         {{ list.append(ip_port) }}
